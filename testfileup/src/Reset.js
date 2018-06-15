@@ -22,6 +22,7 @@ class Reset extends Component {
             alert('Password Reset Email Sent!');
         }).catch((error) => {
             console.log(error);
+            alert('อีเมลที่ใส่ไม่ถูกต้อง')
           });
         
     }

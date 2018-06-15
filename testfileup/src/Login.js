@@ -27,6 +27,7 @@ class Login extends Component {
     e.preventDefault();
     firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password).then((u)=>{
     }).catch((error) => {
+        alert("Username or Password incorrect")
         console.log(error);
       });
   }  
@@ -81,18 +82,18 @@ renderLoginButon() {
                     <br />
                         <p class="sansserif">Log in</p>
                     <div class="form-group">
-                <label for="exampleInputEmail1">Email address&nbsp;&nbsp;:</label>
+                <label for="exampleInputEmail1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Username&nbsp;&nbsp;:</label>
                 <input  value={this.state.email} onChange={this.handleChange} type="email" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" /><br/><br/><br/>
             </div>
             <div class="form-group">
-              <label for="exampleInputPassword1">Password</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
+              <label for="exampleInputPassword1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Password</label>&nbsp;&nbsp;:
               <input  value={this.state.password} onChange={this.handleChange} type="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="Password" />
             </div><br/>
             <button type="submit" onClick={this.loginE} class="loginBtn loginBtn--L">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Login</button>
              
            <button className="loginBtn loginBtn--facebook" onClick={this.login}> Log in with Facebook</button> 
             <button className="loginBtn loginBtn--google" onClick={this.login2}>Log in with Google</button> <br/><br/>
-            <Link to="/Register" >สมัครสมาชิค</Link>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <Link to="/Register" >สมัครสมาชิก</Link>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <Link to="/Reset" >ลืมรหัสผ่าน</Link> 
           
                    
