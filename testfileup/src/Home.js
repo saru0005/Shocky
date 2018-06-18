@@ -81,9 +81,29 @@ class Home extends Component {
           storageRef
               .child(`images/${file.name}`)
               .put(file).then((snapshot) => {
-                alert('File has been uploaded!');
+               // alert('File has been uploaded!');
+                //Get metadata
+         storageRef.child(`images/${file.name}`).getMetadata().then((metadata) => {
+            // Metadata now contains the metadata for 'filepond/${file.name}'
+            let metadataFile = { 
+                name: metadata.name, 
+                size: metadata.size, 
+                contentType: metadata.contentType, 
+                user: this.state.user.displayName || this.state.user.email,
+                progress: '100%'
+            }
+            onUploadProgress: ProgressEvent =>   {
+                console.log('Upload Progress:'+ Math.round(ProgressEvent.loaded / ProgressEvent.total)*100 )
+            }
+            //Process save metadata
+            const databaseRef = fire.database().ref('/image');
+            databaseRef.push({  metadataFile });
+
+        })
           })
+            
         });
+         
       }
       handleInit() {
         // handle init file upload here
@@ -144,7 +164,7 @@ class Home extends Component {
       //โหลดข้อมูล Metadata จาก Firebase
       getMetaDataFromDatabase () {
           console.log("getMetaDataFromDatabase");
-          const databaseRef = fire.database().ref('/filepond');
+          const databaseRef = fire.database().ref('/image');
   
           databaseRef.on('value', snapshot => {
               this.setState({
@@ -185,8 +205,8 @@ class Home extends Component {
 
     renderUpload(){
         if (this.state.user) {  
-            const { rows, filesMetadata } = this.state;
-            var typeAy = ['image/jpeg'];
+            const { rows, filesMetadata, user } = this.state;
+            var typeAy = ['image/jpeg','image/png','image/tiff'];
             return (
                 <div class="App-div.container">
                    
@@ -207,15 +227,11 @@ class Home extends Component {
       
                     {/* Pass FilePond properties as attributes */}
          <FilePond allowMultiple={true} allowFileTypeValidation={true} allowDrop={true} acceptedFileTypes={typeAy}
-         maxFiles={7}
+         allowImagePreview ={false}      
          ref={ref => this.pond = ref}
          server={{ process: this.handleProcessing.bind(this) }}
          oninit={() => this.handleInit()}
        >
-         {this.state.files.map(file => (
-           <File key={file} source={file} />
-         ))}
-    
        </FilePond>
                         </section>
                     </nav>
@@ -227,7 +243,7 @@ class Home extends Component {
                       <StorageDataTable
                         rows={rows}
                         filesMetadata={filesMetadata}
-                       
+                       user={user}
                     />
                         </article>
                     </section>

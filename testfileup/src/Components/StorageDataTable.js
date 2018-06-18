@@ -21,7 +21,6 @@ class StorageDataTable extends Component{
                     <th>{r.name}</th>
                     <th>{r.contentType}</th>
                     <th>{r.size} Mb</th>
-                    <th>{r.progress}</th>
                 </tr>
             )
         });
