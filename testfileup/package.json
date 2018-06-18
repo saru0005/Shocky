@@ -5,6 +5,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "bulma": "^0.7.1",
+    "filepond-plugin-file-validate-type": "^1.1.0",
     "filepond-plugin-image-preview": "^1.0.9",
     "firebase": "^5.0.4",
     "react": "^16.4.0",

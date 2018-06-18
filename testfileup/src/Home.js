@@ -3,6 +3,24 @@ import fire from './config/Fire';
 import './App.css';
 import { Link } from 'react-router-dom'
 import logo from './config/Ling logo.png';  
+import {provider,auth,provider2} from './config/Fire';
+// Import the react-filepond plugin code
+import FilepondPluginFileValidateType from 'filepond-plugin-file-validate-type';
+
+//Import npm react-filepond
+import { FilePond, File, registerPlugin } from 'react-filepond';
+
+// Import FilePond styles
+import 'filepond/dist/filepond.min.css';
+
+// Register the image preview plugin
+import FilePondImagePreview from 'filepond-plugin-image-preview';
+import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
+//Import StorageDataTable
+import StorageDataTable from './Components/StorageDataTable';
+registerPlugin(FilePondImagePreview);
+registerPlugin(FilepondPluginFileValidateType);
+
 class Home extends Component {
     constructor(props) {
         super(props);
@@ -11,8 +29,21 @@ class Home extends Component {
      //   this.uploadHandler = this.uploadHandler.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.fileuploadHandler = this.fileuploadHandler.bind(this);
+        this.state = {
+            files: [], //ใช้เก็บข้อมูล File ที่ Upload
+            uploadValue: 0, //ใช้เพื่อดู Process การ Upload
+            filesMetadata:[], //ใช้เพื่อรับข้อมูล Metadata จาก Firebase
+            rows:  [], //ใช้วาด DataTable
+        };
+  
     }
-    
+    componentDidMount() {
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                this.setState({ user });
+            }
+        });
+      }
 
 
     logout() {
@@ -54,32 +85,159 @@ class Home extends Component {
           })
         });
       }
-    renderUpload(){
-        return (
-          
-            <div className="loading container wrapper">
-            <img src={logo} className="App-logo" alt="logo" />  
-            <div class="form-group">
-            <input id="file" type="file" accept=".jpg, .png, .tiff" onChange={this.handleChange.bind(this)} required multiple />
-            <br/>  <br/>  <br/>
-    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-    <button className="loginBtn2 loginBtn--U" onClick={this.fileuploadHandler}> &nbsp; &nbsp; &nbsp; &nbsp;Upload!</button> <br /><br /><br />
-    <Link to="/" >      <button className="loginBtn loginBtn--N" onClick = {this.logout}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Logout</button> 
-            </Link>  
-            
-    </div>
-    <div class="form-group">
-    </div><br/>
-        </div>
+      handleInit() {
+        // handle init file upload here
+        console.log('now initialised', this.pond);
+      }
+    
+      handleProcessing(fieldName, file, metadata, load, error, progress, abort) {
+        // handle file upload here
+        console.log(" handle file upload here");
+        console.log(file);
+    
+        const fileUpload = file;
+        const storageRef = fire.storage().ref(`filepond/${file.name}`);
+        const task = storageRef.put(fileUpload)
+    
+        task.on(`state_changed` , (snapshort) => {
+            console.log(snapshort.bytesTransferred, snapshort.totalBytes)
+            let percentage = (snapshort.bytesTransferred / snapshort.totalBytes) * 100;
+            //Process
+            this.setState({
+                uploadValue:percentage
+            })
+        } , (error) => {
+            //Error
+            this.setState({
+                messag:`Upload error : ${error.messag}`
+            })
+        } , () => {
+            //Success
+            this.setState({
+                messag:`Upload Success`,
+                picture: task.snapshot.downloadURL //เผื่อนำไปใช้ต่อในการแสดงรูปที่ Upload ไป
+            })
+    
+            //Get metadata
+            storageRef.getMetadata().then((metadata) => {
+                // Metadata now contains the metadata for 'filepond/${file.name}'
+                let metadataFile = { 
+                    name: metadata.name, 
+                    size: metadata.size, 
+                    contentType: metadata.contentType, 
+                    user: this.state.user.displayName || this.state.user.email,
+                    progress: '100%'
+                }
+    
+                //Process save metadata
+                const databaseRef = fire.database().ref('/filepond');
+                databaseRef.push({  metadataFile });
+    
+            })
+        })
+      }
 
-                
-                
+      componentWillMount() {
+        this.getMetaDataFromDatabase()
+      }
+  
+      //โหลดข้อมูล Metadata จาก Firebase
+      getMetaDataFromDatabase () {
+          console.log("getMetaDataFromDatabase");
+          const databaseRef = fire.database().ref('/filepond');
+  
+          databaseRef.on('value', snapshot => {
+              this.setState({
+                  filesMetadata:snapshot.val()
+              }, () => this.addMetadataToList());
+          });
+      }
 
+      addMetadataToList() {
+        let i = 1;
+        let rows = [];
 
-        )
+        //Loop add data to rows
+        for (let key in this.state.filesMetadata) {
+              
+            let fileData = this.state.filesMetadata[key];
+
+            let objRows =  { 
+                no:i++, 
+                key:key, //ใช้เพื่อ Delete
+                name: fileData.metadataFile.name, 
+                fullPath: fileData.metadataFile.fullPath,
+                size:(fileData.metadataFile.size),
+                contentType:fileData.metadataFile.contentType,
+                user: this.state.user.displayName || this.state.user.email,
+                progress: '100%'
+            }
+
+            rows.push(objRows)
+        }
         
+        this.setState({
+            rows: rows
+        }, () => {
+            console.log('Set Rows')
+        })
     }
 
+    renderUpload(){
+        if (this.state.user) {  
+            const { rows, filesMetadata } = this.state;
+            var typeAy = ['image/jpeg'];
+            return (
+                <div class="App-div.container">
+                   
+                    <nav class="App-nav">
+                        <section className="App-item">
+                        <br />  <br />
+                        <div class="p">
+                            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;User : {this.state.user.displayName}&nbsp;&nbsp;&nbsp;&nbsp;</p> <br />
+                            </div>
+                            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                                 <Link to="/" ><button className="loginBtn loginBtn--N" onClick = {this.logout}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Logout</button></Link>  
+                            <br /><br /><br /><br /><br /><br /><br />
+                            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                            <input id="file" type="file" accept=".jpg, .png, .tiff" onChange={this.handleChange.bind(this)} required multiple />
+                              <br/>  <br/>  <br/>
+                              &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                               <button className="loginBtn2 loginBtn--U" onClick={this.fileuploadHandler}> &nbsp; &nbsp; &nbsp; &nbsp;Upload!</button> <br /><br /><br />
+      
+                    {/* Pass FilePond properties as attributes */}
+         <FilePond allowMultiple={true} allowFileTypeValidation={true} allowDrop={true} acceptedFileTypes={typeAy}
+         maxFiles={7}
+         ref={ref => this.pond = ref}
+         server={{ process: this.handleProcessing.bind(this) }}
+         oninit={() => this.handleInit()}
+       >
+         {this.state.files.map(file => (
+           <File key={file} source={file} />
+         ))}
+    
+       </FilePond>
+                        </section>
+                    </nav>
+                    <section className="display-item">
+                        <article className="App-article">
+                            <br /><br />
+
+     
+                      <StorageDataTable
+                        rows={rows}
+                        filesMetadata={filesMetadata}
+                       
+                    />
+                        </article>
+                    </section>
+                </div>
+            );
+    
+    } else {
+      
+    }
+    }
     render() {
         return (
             <div className="App">
