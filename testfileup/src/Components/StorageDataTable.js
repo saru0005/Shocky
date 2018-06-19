@@ -13,11 +13,10 @@ class StorageDataTable extends Component{
             return (
                 
                 <tr key={r.no + r.name}>
-                    <th>{r.no}</th>
                     <th>{r.name}</th>
                     <th>{r.contentType}</th>
                     <th>{r.size} </th>
-                   
+                   <th>{r.progress} </th>
                 </tr>
             )}
             else {
@@ -29,7 +28,6 @@ class StorageDataTable extends Component{
                 <table id="t01">
                     <thead>
                         <tr>
-                            <th>No.</th>
                             <th>File Name</th>
                             <th>File Type</th>
                             <th>File Size</th>

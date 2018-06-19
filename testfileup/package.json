@@ -8,6 +8,7 @@
     "filepond-plugin-file-validate-type": "^1.1.0",
     "filepond-plugin-image-preview": "^1.0.9",
     "firebase": "^5.0.4",
+    "rc-progress": "^2.2.5",
     "react": "^16.4.0",
     "react-dom": "^16.4.0",
     "react-filepond": "^2.0.6",

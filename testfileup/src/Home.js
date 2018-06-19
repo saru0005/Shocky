@@ -31,7 +31,7 @@ class Home extends Component {
         this.fileuploadHandler = this.fileuploadHandler.bind(this);
         this.state = {
             files: [], //ใช้เก็บข้อมูล File ที่ Upload
-            uploadValue: 0, //ใช้เพื่อดู Process การ Upload
+            progressbar: 0, //ใช้เพื่อดู Process การ Upload
             filesMetadata:[], //ใช้เพื่อรับข้อมูล Metadata จาก Firebase
             rows:  [], //ใช้วาด DataTable
         };
@@ -82,7 +82,9 @@ class Home extends Component {
           storageRef
               .child(`images/${file.name}`)
               .put(file).then((snapshot) => {
-                  
+                var progressbar = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                console.log('Upload is ' +  progressbar + '% done');
+                this.setState({progressbar})
                // alert('File has been uploaded!');
                 //Get metadata
          storageRef.child(`images/${file.name}`).getMetadata().then((metadata) => {
@@ -92,7 +94,7 @@ class Home extends Component {
                 size: metadata.size, 
                 contentType: metadata.contentType, 
                 user:  this.state.user.email,
-                progress: '100%'
+                progress: 'Complete'
             }
 
             //Process save metadata
@@ -139,7 +141,7 @@ class Home extends Component {
                 size:(fileData.metadataFile.size),
                 contentType:fileData.metadataFile.contentType,
                 user: fileData.metadataFile.user,
-                progress: '100%'
+                progress: 'Complete'
             }
 
             rows.push(objRows)
@@ -173,7 +175,7 @@ class Home extends Component {
                               <br/>  <br/>  <br/>
                               &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                                <button className="loginBtn2 loginBtn--U" onClick={this.fileuploadHandler}> &nbsp; &nbsp; &nbsp; &nbsp;Upload!</button> <br /><br /><br />
-    
+                                Uploading : {this.state.progressbar}
                         </section>
                     </nav>
                     <section className="display-item">
