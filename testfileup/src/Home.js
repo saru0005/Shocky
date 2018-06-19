@@ -78,9 +78,11 @@ class Home extends Component {
       
         const storageRef = fire.storage().ref();
         this.state.file.forEach((file) => {
+
           storageRef
               .child(`images/${file.name}`)
               .put(file).then((snapshot) => {
+                  
                // alert('File has been uploaded!');
                 //Get metadata
          storageRef.child(`images/${file.name}`).getMetadata().then((metadata) => {
@@ -89,12 +91,10 @@ class Home extends Component {
                 name: metadata.name, 
                 size: metadata.size, 
                 contentType: metadata.contentType, 
-                user: this.state.user.displayName || this.state.user.email,
+                user:  this.state.user.email,
                 progress: '100%'
             }
-            onUploadProgress: ProgressEvent =>   {
-                console.log('Upload Progress:'+ Math.round(ProgressEvent.loaded / ProgressEvent.total)*100 )
-            }
+
             //Process save metadata
             const databaseRef = fire.database().ref('/image');
             databaseRef.push({  metadataFile });
@@ -105,65 +105,14 @@ class Home extends Component {
         });
          
       }
-      handleInit() {
-        // handle init file upload here
-        console.log('now initialised', this.pond);
-      }
-    
-      handleProcessing(fieldName, file, metadata, load, error, progress, abort) {
-        // handle file upload here
-        console.log(" handle file upload here");
-        console.log(file);
-    
-        const fileUpload = file;
-        const storageRef = fire.storage().ref(`filepond/${file.name}`);
-        const task = storageRef.put(fileUpload)
-    
-        task.on(`state_changed` , (snapshort) => {
-            console.log(snapshort.bytesTransferred, snapshort.totalBytes)
-            let percentage = (snapshort.bytesTransferred / snapshort.totalBytes) * 100;
-            //Process
-            this.setState({
-                uploadValue:percentage
-            })
-        } , (error) => {
-            //Error
-            this.setState({
-                messag:`Upload error : ${error.messag}`
-            })
-        } , () => {
-            //Success
-            this.setState({
-                messag:`Upload Success`,
-                picture: task.snapshot.downloadURL //เผื่อนำไปใช้ต่อในการแสดงรูปที่ Upload ไป
-            })
-    
-            //Get metadata
-            storageRef.getMetadata().then((metadata) => {
-                // Metadata now contains the metadata for 'filepond/${file.name}'
-                let metadataFile = { 
-                    name: metadata.name, 
-                    size: metadata.size, 
-                    contentType: metadata.contentType, 
-                    user: this.state.user.displayName || this.state.user.email,
-                    progress: '100%'
-                }
-    
-                //Process save metadata
-                const databaseRef = fire.database().ref('/filepond');
-                databaseRef.push({  metadataFile });
-    
-            })
-        })
-      }
-
+ 
       componentWillMount() {
         this.getMetaDataFromDatabase()
       }
   
       //โหลดข้อมูล Metadata จาก Firebase
       getMetaDataFromDatabase () {
-          console.log("getMetaDataFromDatabase");
+      //    console.log("getMetaDataFromDatabase");
           const databaseRef = fire.database().ref('/image');
   
           databaseRef.on('value', snapshot => {
@@ -189,7 +138,7 @@ class Home extends Component {
                 fullPath: fileData.metadataFile.fullPath,
                 size:(fileData.metadataFile.size),
                 contentType:fileData.metadataFile.contentType,
-                user: this.state.user.displayName || this.state.user.email,
+                user: fileData.metadataFile.user,
                 progress: '100%'
             }
 
@@ -199,7 +148,7 @@ class Home extends Component {
         this.setState({
             rows: rows
         }, () => {
-            console.log('Set Rows')
+      //      console.log('Set Rows')
         })
     }
 
@@ -214,7 +163,7 @@ class Home extends Component {
                         <section className="App-item">
                         <br />  <br />
                         <div class="p">
-                            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;User : {this.state.user.displayName}&nbsp;&nbsp;&nbsp;&nbsp;</p> <br />
+                            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;User : {this.state.user.displayName || this.state.user.email }&nbsp;&nbsp;&nbsp;&nbsp;</p> <br />
                             </div>
                             &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                                  <Link to="/" ><button className="loginBtn loginBtn--N" onClick = {this.logout}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Logout</button></Link>  
@@ -224,15 +173,7 @@ class Home extends Component {
                               <br/>  <br/>  <br/>
                               &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                                <button className="loginBtn2 loginBtn--U" onClick={this.fileuploadHandler}> &nbsp; &nbsp; &nbsp; &nbsp;Upload!</button> <br /><br /><br />
-      
-                    {/* Pass FilePond properties as attributes */}
-         <FilePond allowMultiple={true} allowFileTypeValidation={true} allowDrop={true} acceptedFileTypes={typeAy}
-         allowImagePreview ={false}      
-         ref={ref => this.pond = ref}
-         server={{ process: this.handleProcessing.bind(this) }}
-         oninit={() => this.handleInit()}
-       >
-       </FilePond>
+    
                         </section>
                     </nav>
                     <section className="display-item">

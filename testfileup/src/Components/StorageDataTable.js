@@ -5,24 +5,24 @@ class StorageDataTable extends Component{
     constructor(props){
         super(props);
     }
-    componentDidMount() {
-        auth.onAuthStateChanged((user) => {
-            if (user) {
-                this.setState({ user });
-            }
-        });
-      }
     render() {
-        
+        const user = this.props.user;
+        console.log(user.email)
         let messageNodes = this.props.rows.map((r) => {
+            if(user.email === r.user){
             return (
+                
                 <tr key={r.no + r.name}>
                     <th>{r.no}</th>
                     <th>{r.name}</th>
                     <th>{r.contentType}</th>
-                    <th>{r.size} Mb</th>
+                    <th>{r.size} </th>
+                   
                 </tr>
-            )
+            )}
+            else {
+
+            }
         });
         return (
             <div>
