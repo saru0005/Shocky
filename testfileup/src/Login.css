@@ -117,10 +117,10 @@ body {
   .loginBtn--L {
     background: #1aff66;
     width: 210px;
-    text-align: left;
+    text-align: center;
   }
   .loginBtn--L:before {
-    border-right: 009933 1px solid;
+  
     
   }
   .loginBtn--L:hover,
@@ -130,7 +130,7 @@ body {
   .loginBtn--M {
     background: #CED2D0;
     width: 210px;
-    text-align: left;
+    text-align: center;
   }
   .loginBtn--M:before {
     border-right: 009933 1px solid;

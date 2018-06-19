@@ -31,7 +31,7 @@ class Home extends Component {
         this.fileuploadHandler = this.fileuploadHandler.bind(this);
         this.state = {
             files: [], //ใช้เก็บข้อมูล File ที่ Upload
-            progressbar: 0, //ใช้เพื่อดู Process การ Upload
+            progress: 0, //ใช้เพื่อดู Process การ Upload
             filesMetadata:[], //ใช้เพื่อรับข้อมูล Metadata จาก Firebase
             rows:  [], //ใช้วาด DataTable
         };
@@ -82,10 +82,13 @@ class Home extends Component {
           storageRef
               .child(`images/${file.name}`)
               .put(file).then((snapshot) => {
-                var progressbar = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                console.log('Upload is ' +  progressbar + '% done');
-                this.setState({progressbar})
-               // alert('File has been uploaded!');
+                var uploadTask = storageRef.child(`images/${file.name}`).put(file);
+                uploadTask.on('state_changed', (snapshot) =>{
+                    var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    this.setState({progress});
+                    console.log('Upload is ' + progress + '% done');
+                })
+                               // alert('File has been uploaded!');
                 //Get metadata
          storageRef.child(`images/${file.name}`).getMetadata().then((metadata) => {
             // Metadata now contains the metadata for 'filepond/${file.name}'
@@ -94,7 +97,6 @@ class Home extends Component {
                 size: metadata.size, 
                 contentType: metadata.contentType, 
                 user:  this.state.user.email,
-                progress: 'Complete'
             }
 
             //Process save metadata
@@ -141,7 +143,8 @@ class Home extends Component {
                 size:(fileData.metadataFile.size),
                 contentType:fileData.metadataFile.contentType,
                 user: fileData.metadataFile.user,
-                progress: 'Complete'
+                progress: this.setState.progress
+               
             }
 
             rows.push(objRows)
@@ -156,7 +159,7 @@ class Home extends Component {
 
     renderUpload(){
         if (this.state.user) {  
-            const { rows, filesMetadata, user } = this.state;
+            const { rows, filesMetadata, user,progress } = this.state;
             var typeAy = ['image/jpeg','image/png','image/tiff'];
             return (
                 <div class="App-div.container">
@@ -175,7 +178,7 @@ class Home extends Component {
                               <br/>  <br/>  <br/>
                               &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                                <button className="loginBtn2 loginBtn--U" onClick={this.fileuploadHandler}> &nbsp; &nbsp; &nbsp; &nbsp;Upload!</button> <br /><br /><br />
-                                Uploading : {this.state.progressbar}
+                                Uploading : {this.state.progress}
                         </section>
                     </nav>
                     <section className="display-item">
@@ -187,6 +190,7 @@ class Home extends Component {
                         rows={rows}
                         filesMetadata={filesMetadata}
                        user={user}
+                       progress={progress}
                     />
                         </article>
                     </section>

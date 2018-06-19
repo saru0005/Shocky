@@ -7,6 +7,8 @@ class StorageDataTable extends Component{
     }
     render() {
         const user = this.props.user;
+        const progress = this.props.progress;
+    
         console.log(user.email)
         let messageNodes = this.props.rows.map((r) => {
             if(user.email === r.user){
@@ -16,7 +18,7 @@ class StorageDataTable extends Component{
                     <th>{r.name}</th>
                     <th>{r.contentType}</th>
                     <th>{r.size} </th>
-                   <th>{r.progress} </th>
+                   <th>{progress} </th>
                 </tr>
             )}
             else {

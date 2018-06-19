@@ -72,7 +72,7 @@ class Register extends Component {
               <label for="exampleInputPassword1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Password</label>&nbsp;&nbsp;:
                 <input  value={this.state.password} onChange={this.handleChange} type="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="Password" />
               </div><br/>
-              <button type="submit" onClick={this.registerU} class="loginBtn loginBtn--L">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ยืนยัน</button>  <br/><br/> 
+              <button type="submit" onClick={this.registerU} class="loginBtn loginBtn--L">ยืนยัน</button>  <br/><br/> 
               <Link to="/" >Back</Link>    
                       <br /> <br />
                    
