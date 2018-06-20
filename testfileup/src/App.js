@@ -3,7 +3,6 @@ import './App.css';
 import { Switch, Route } from 'react-router-dom'
 //Import Firebase
 import fire from './config/Fire';
-import { Link } from 'react-router-dom'
 import Home from './Home'
 import Login from './Login'
 import Register from './Register'

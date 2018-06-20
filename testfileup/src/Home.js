@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import fire from './config/Fire';
 import './App.css';
 import { Link } from 'react-router-dom'
-import logo from './config/Ling logo.png';  
-import {provider,auth,provider2} from './config/Fire';
+
+import {auth} from './config/Fire';
 // Import the react-filepond plugin code
 import FilepondPluginFileValidateType from 'filepond-plugin-file-validate-type';
 
 //Import npm react-filepond
-import { FilePond, File, registerPlugin } from 'react-filepond';
+import {   registerPlugin } from 'react-filepond';
 
 // Import FilePond styles
 import 'filepond/dist/filepond.min.css';
@@ -31,7 +31,7 @@ class Home extends Component {
         this.fileuploadHandler = this.fileuploadHandler.bind(this);
         this.state = {
             files: [], //ใช้เก็บข้อมูล File ที่ Upload
-            progress: 0, //ใช้เพื่อดู Process การ Upload
+            fixprogress: 0, //ใช้เพื่อดู Process การ Upload
             filesMetadata:[], //ใช้เพื่อรับข้อมูล Metadata จาก Firebase
             rows:  [], //ใช้วาด DataTable
         };
@@ -85,8 +85,9 @@ class Home extends Component {
                 var uploadTask = storageRef.child(`images/${file.name}`).put(file);
                 uploadTask.on('state_changed', (snapshot) =>{
                     var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                    this.setState({progress});
-                    console.log('Upload is ' + progress + '% done');
+                var    fixprogress = progress.toFixed(2);
+                    this.setState({fixprogress});
+                    console.log('Upload is ' + fixprogress + '% done');
                 })
                                // alert('File has been uploaded!');
                 //Get metadata
@@ -143,7 +144,7 @@ class Home extends Component {
                 size:(fileData.metadataFile.size),
                 contentType:fileData.metadataFile.contentType,
                 user: fileData.metadataFile.user,
-                progress: this.setState.progress
+                fixprogress: this.setState.fixprogress
                
             }
 
@@ -159,8 +160,8 @@ class Home extends Component {
 
     renderUpload(){
         if (this.state.user) {  
-            const { rows, filesMetadata, user,progress } = this.state;
-            var typeAy = ['image/jpeg','image/png','image/tiff'];
+            const { rows, filesMetadata, user,fixprogress } = this.state;
+           
             return (
                 <div class="App-div.container">
                    
@@ -178,7 +179,7 @@ class Home extends Component {
                               <br/>  <br/>  <br/>
                               &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                                <button className="loginBtn2 loginBtn--U" onClick={this.fileuploadHandler}> &nbsp; &nbsp; &nbsp; &nbsp;Upload!</button> <br /><br /><br />
-                                Uploading : {this.state.progress}
+                                
                         </section>
                     </nav>
                     <section className="display-item">
@@ -190,7 +191,7 @@ class Home extends Component {
                         rows={rows}
                         filesMetadata={filesMetadata}
                        user={user}
-                       progress={progress}
+                       fixprogress={fixprogress}
                     />
                         </article>
                     </section>

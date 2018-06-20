@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {auth} from '../config/Fire';
+    
 class StorageDataTable extends Component{
     
     constructor(props){
@@ -7,7 +7,7 @@ class StorageDataTable extends Component{
     }
     render() {
         const user = this.props.user;
-        const progress = this.props.progress;
+        const fixprogress = this.props.fixprogress;
     
         console.log(user.email)
         let messageNodes = this.props.rows.map((r) => {
@@ -18,7 +18,7 @@ class StorageDataTable extends Component{
                     <th>{r.name}</th>
                     <th>{r.contentType}</th>
                     <th>{r.size} </th>
-                   <th>{progress} </th>
+                   <th>{fixprogress} </th>
                 </tr>
             )}
             else {

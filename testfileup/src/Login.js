@@ -4,8 +4,6 @@ import {provider,auth,provider2} from './config/Fire';
 import logo from './config/Ling logo.png';
 import './Login.css';
 import { Link } from 'react-router-dom';
-import Register from './Register';
-import Home from './Home';
 class Login extends Component {
     
   constructor() {
@@ -40,8 +38,7 @@ login = () => {
         console.log(user);
         that.setState({ user: user });
     }).catch(function (error) {
-        var errorCode = error.code;
-        var errorMessage = error.message;
+    
     });
 }
 login2 = () => {
@@ -51,8 +48,7 @@ login2 = () => {
         console.log(user);
         that.setState({ user: user });
     }).catch(function (error) {
-        var errorCode = error.code;
-        var errorMessage = error.message;
+   
     });
 }
 componentDidMount() {

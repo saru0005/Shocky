@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import firebase from './config/Fire';
 import './App.css';
 import { Link } from 'react-router-dom'
-import {provider,auth,provider2} from './config/Fire';
+import {auth} from './config/Fire';
 import logo from './config/Ling logo.png';
 class Register extends Component {
     constructor(props) {
