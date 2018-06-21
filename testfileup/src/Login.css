@@ -1,9 +1,10 @@
 body {
   background-image: url("pic3.jpg");
   background-color: #cccccc;
-  background-size:     cover;
+  background-position: Center;
+  background-repeat: no-repeat
                     /* <------ */
-  background-repeat:   no-repeat;
+
  
   
 }

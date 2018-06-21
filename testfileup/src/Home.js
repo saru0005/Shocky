@@ -24,17 +24,16 @@ registerPlugin(FilepondPluginFileValidateType);
 class Home extends Component {
     constructor(props) {
         super(props);
-        this.logout = this.logout.bind(this);
-     //   this.fileChangedHandler = this.fileChangedHandler.bind(this);
-     //   this.uploadHandler = this.uploadHandler.bind(this);
-        this.handleChange = this.handleChange.bind(this);
-        this.fileuploadHandler = this.fileuploadHandler.bind(this);
+        this.logout = this.logout.bind(this);   
+        this.uploadSubmit = this.uploadSubmit.bind(this);
+        this.uploadFile = this.uploadFile.bind(this);
+        this.strRef = fire.storage().ref();
         this.state = {
             files: [], //ใช้เก็บข้อมูล File ที่ Upload
             progress: 0, //ใช้เพื่อดู Process การ Upload
             filesMetadata:[], //ใช้เพื่อรับข้อมูล Metadata จาก Firebase
             rows:  [], //ใช้วาด DataTable
-            uploadFilesObj: {}
+            uploadFilesObj: {}  
         };
   
     }
@@ -51,66 +50,98 @@ class Home extends Component {
         fire.auth().signOut();
         this.setState({user: null});
     }
+    //new multi
+    uploadSubmit(event) {
+        event.preventDefault();
+        const allFiles = Array.from(this.fileInput.files);
+        if (allFiles.length > 0) {
+            // Add each files to state
+            var tempUploadFilesObj = {};
+            allFiles.forEach( (file, index) => {
+                var fileObj = {};
+                fileObj.fileName = file.name;
+                fileObj.isUploading = true;
+                fileObj.progressPercent = 0;
+                const objKey = `file${index}`;
+                tempUploadFilesObj[objKey] = fileObj;
+            });
+            this.setState({
+                uploadFilesObj: tempUploadFilesObj
+            });
 
     state = {selectedFile: null}
-    //single
- //   fileChangedHandler = (event) => {
-  //      const file = event.target.files[0];
-  //      this.setState({ file });
-  //  }
-    //single
-  //  uploadHandler = () => {
-  //      const storageRef = fire.storage().ref();
-  //      storageRef.child(`images/${this.state.file.name}`)
-  //          .put(this.state.file).then((snapshot) => {
-            
-  //      });
-  //    }
-
-    //display multi
-    handleChange(event) {
-
-        const file = Array.from(event.target.files);
-        this.setState({ file });   
+            // Upload each files & update progress
+            allFiles.forEach( (file, index) => {
+                this.uploadFile(file, index)
+            });
+        }
+        
         
     }
-    //multi
-    fileuploadHandler = () => {
-      
-        const storageRef = fire.storage().ref();
-        this.state.file.forEach((file) => {
+    //new muti upload C.
+    uploadFile(file, index) {
+        var fileObjKey = `file${index}`;
+        var metadata = {
+            contentType: file.type
+        };
+        
+        var uploadTask = this.strRef.child(`images/${file.name}`).put(file, metadata);
 
-          storageRef
-              .child(`images/${file.name}`)
-              .put(file).then((snapshot) => {
-                var uploadTask = storageRef.child(`images/${file.name}`).put(file);
-                uploadTask.on('state_changed', (snapshot) =>{
-                    var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                var    fixprogress = progress.toFixed(2);
-                    this.setState({fixprogress});
-                    console.log('Upload is ' + fixprogress + '% done');
-                })
-                               // alert('File has been uploaded!');
-                //Get metadata
-         storageRef.child(`images/${file.name}`).getMetadata().then((metadata) => {
-            // Metadata now contains the metadata for 'filepond/${file.name}'
-            let metadataFile = { 
-                name: metadata.name, 
-                size: metadata.size, 
-                contentType: metadata.contentType, 
-                user:  this.state.user.email
+        uploadTask.on("state_changed", (snapshot) => {
+            // Progress handling
+            var progressPercent = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            console.log(`Upload #${index} is ${progressPercent}% done`);
+            var stateCopy = Object.assign({}, this.state);
+            stateCopy.uploadFilesObj[fileObjKey].progressPercent = progressPercent;
+            this.setState(stateCopy);
+            switch (snapshot.state) {
+                case fire.storage.TaskState.PAUSED:
+                    console.log('Upload is paused');
+                    break;
+                case fire.storage.TaskState.RUNNING:
+                    //console.log('Upload is running');
+                    break;
+                default:
+                    console.log('No default');
             }
+        }, (error) => {
+            // Error handling
+            console.log(error);
+            var stateCopy = Object.assign({}, this.state);
+            stateCopy.uploadFilesObj[fileObjKey].progressPercent = 0;
+            this.setState(stateCopy);
+        }, () => {
+            // Complete handling
+            console.log(`Upload #${index} completed`);
+            var stateCopy = Object.assign({}, this.state);
+            stateCopy.uploadFilesObj[fileObjKey].progressPercent = 100;
+            this.setState(stateCopy);
+             //Get metadata
+             this.strRef.child(`images/${file.name}`).getMetadata().then((metadata) => {
+                // Metadata now contains the metadata for 'filepond/${file.name}'
+                let metadataFile = { 
+                    name: metadata.name, 
+                    size: metadata.size, 
+                    contentType: metadata.contentType, 
+                    user:  this.state.user.email,
+                    
+                    
+                }
+    
+                //Process save metadata
+                const databaseRef = fire.database().ref('/image');
+                databaseRef.push({  metadataFile });
+    
+            })
 
-            //Process save metadata
-            const databaseRef = fire.database().ref('/image');
-            databaseRef.push({  metadataFile });
-
-        })
-          })
-            
+            // Delay before delete file from state
+         //   setTimeout(() => {
+         //       delete stateCopy.uploadFilesObj[fileObjKey];
+         //       this.setState(stateCopy);
+         //   }, 0.5);
         });
-         
-      }
+    }
+  
  
       componentWillMount() {
         this.getMetaDataFromDatabase()
@@ -174,8 +205,7 @@ class Home extends Component {
                 fullPath: fileData.metadataFile.fullPath,
                 size:(fileData.metadataFile.size),
                 contentType:fileData.metadataFile.contentType,
-                user: fileData.metadataFile.user,
-                fixprogress: this.setState.fixprogress
+                user: fileData.metadataFile.user
                
             }
 
@@ -191,8 +221,8 @@ class Home extends Component {
 
     renderUpload(){
         if (this.state.user) {  
-            const { rows, filesMetadata, user,fixprogress } = this.state;
-           
+            const { rows, filesMetadata, user,stateCopy } = this.state;
+            const {uploadFilesObj} = this.state;
             return (
                 <div class="App-div.container">
                    
@@ -204,30 +234,56 @@ class Home extends Component {
                             </div>
                             &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                                  <Link to="/" ><button className="loginBtn loginBtn--N" onClick = {this.logout}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Logout</button></Link>  
-                            <br /><br /><br /><br /><br /><br /><br />
+                            <br /><br /><br /><br />
                             &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                            <input id="file" type="file" accept=".jpg, .png, .tiff" onChange={this.handleChange.bind(this)} required multiple />
-                              <br/>  <br/>  <br/>
-                              &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                               <button className="loginBtn2 loginBtn--U" onClick={this.fileuploadHandler}> &nbsp; &nbsp; &nbsp; &nbsp;Upload!</button> <br /><br /><br />
-                                uploading {this.state.fixprogress}
+                           
+                            <form onSubmit={this.uploadSubmit}>
+                            <div class="inpc">
+                    <input 
+                        type="file" 
+                        accept=".jpg, .png, .tiff"
+                        multiple 
+                        ref={input => {
+                            this.fileInput = input;
+                        }} />
+                        <button className="loginBtn2 loginBtn--U" type="submit">Upload</button>
+                        </div>
+                 
+                </form>
+              
+                <br/>
+                <br/>
+                <div class="barPro">
+                {
+                    Object.keys(uploadFilesObj).map( (key, index) => {
+                        const fileObj = uploadFilesObj[key];
+                        return (
+                            <div key={index}>
+                                <progress value={fileObj.progressPercent} max="100"></progress>
+                                <p>{fileObj.fileName}</p>
+                                <br/>
+                            </div>
+                        );
+                    })
+                }
+                </div>
                         </section>
                     </nav>
                     <section className="display-item">
                         <article className="App-article">
                             <br /><br />
-
+                            <div class="showprogress">
      
                       <StorageDataTable
                         rows={rows}
                         filesMetadata={filesMetadata}
                        user={user}
-                       fixprogress={fixprogress}
                        deleteData={this.deleteMetaDataFromDatabase}
-                    />
+                    /> </div>
                         </article>
                     </section>
                 </div>
+                
             );
     
     } else {
