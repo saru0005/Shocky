@@ -12,8 +12,10 @@
     "react": "^16.4.0",
     "react-dom": "^16.4.0",
     "react-filepond": "^2.0.6",
+    "react-popup": "^0.9.3",
     "react-router-dom": "^4.3.1",
-    "react-scripts": "1.1.4"
+    "react-scripts": "1.1.4",
+    "reactjs-popup": "^1.1.1"
   },
   "scripts": {
     "start": "react-scripts start",

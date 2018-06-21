@@ -31,9 +31,10 @@ class Home extends Component {
         this.fileuploadHandler = this.fileuploadHandler.bind(this);
         this.state = {
             files: [], //ใช้เก็บข้อมูล File ที่ Upload
-            fixprogress: 0, //ใช้เพื่อดู Process การ Upload
+            progress: 0, //ใช้เพื่อดู Process การ Upload
             filesMetadata:[], //ใช้เพื่อรับข้อมูล Metadata จาก Firebase
             rows:  [], //ใช้วาด DataTable
+            uploadFilesObj: {}
         };
   
     }
@@ -97,7 +98,7 @@ class Home extends Component {
                 name: metadata.name, 
                 size: metadata.size, 
                 contentType: metadata.contentType, 
-                user:  this.state.user.email,
+                user:  this.state.user.email
             }
 
             //Process save metadata
@@ -125,6 +126,36 @@ class Home extends Component {
                   filesMetadata:snapshot.val()
               }, () => this.addMetadataToList());
           });
+      }
+       //ลบข้อมูล Metada จาก Firebase
+  deleteMetaDataFromDatabase(e, rowData) {
+    
+        const storageRef = fire.storage().ref(`images/${rowData.name}`);
+    
+        // Delete the file on storage
+        storageRef.delete()
+          .then(() => {
+            console.log("Delete file success");
+    
+            let databaseRef = fire.database().ref('/image');
+    
+            // Delete the file on realtime database
+            databaseRef.child(rowData.key).remove()
+              .then(() => {
+                console.log("Delete metada success");
+                this.getMetaDataFromDatabase()
+              })
+              .catch((error) => {
+                console.log("Delete metada error : ", error.message);
+              });
+    
+          })
+    
+          .catch((error) => {
+            console.log("Delete file error : ", error.message);
+          });
+    
+    
       }
 
       addMetadataToList() {
@@ -179,7 +210,7 @@ class Home extends Component {
                               <br/>  <br/>  <br/>
                               &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                                <button className="loginBtn2 loginBtn--U" onClick={this.fileuploadHandler}> &nbsp; &nbsp; &nbsp; &nbsp;Upload!</button> <br /><br /><br />
-                                
+                                uploading {this.state.fixprogress}
                         </section>
                     </nav>
                     <section className="display-item">
@@ -192,6 +223,7 @@ class Home extends Component {
                         filesMetadata={filesMetadata}
                        user={user}
                        fixprogress={fixprogress}
+                       deleteData={this.deleteMetaDataFromDatabase}
                     />
                         </article>
                     </section>
