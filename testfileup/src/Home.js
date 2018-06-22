@@ -4,22 +4,10 @@ import './App.css';
 import { Link } from 'react-router-dom'
 
 import {auth} from './config/Fire';
-// Import the react-filepond plugin code
-import FilepondPluginFileValidateType from 'filepond-plugin-file-validate-type';
 
-//Import npm react-filepond
-import {   registerPlugin } from 'react-filepond';
-
-// Import FilePond styles
-import 'filepond/dist/filepond.min.css';
-
-// Register the image preview plugin
-import FilePondImagePreview from 'filepond-plugin-image-preview';
-import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
 //Import StorageDataTable
 import StorageDataTable from './Components/StorageDataTable';
-registerPlugin(FilePondImagePreview);
-registerPlugin(FilepondPluginFileValidateType);
+
 
 class Home extends Component {
     constructor(props) {
@@ -69,7 +57,6 @@ class Home extends Component {
                 uploadFilesObj: tempUploadFilesObj
             });
 
-    state = {selectedFile: null}
             // Upload each files & update progress
             allFiles.forEach( (file, index) => {
                 this.uploadFile(file, index)
@@ -89,7 +76,8 @@ class Home extends Component {
 
         uploadTask.on("state_changed", (snapshot) => {
             // Progress handling
-            var progressPercent = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            var progressFix= (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            var progressPercent = progressFix.toFixed(2)
             console.log(`Upload #${index} is ${progressPercent}% done`);
             var stateCopy = Object.assign({}, this.state);
             stateCopy.uploadFilesObj[fileObjKey].progressPercent = progressPercent;
@@ -124,8 +112,7 @@ class Home extends Component {
                     size: metadata.size, 
                     contentType: metadata.contentType, 
                     user:  this.state.user.email,
-                    
-                    
+                   // stateCopy: this.state.stateCopy
                 }
     
                 //Process save metadata
@@ -205,7 +192,8 @@ class Home extends Component {
                 fullPath: fileData.metadataFile.fullPath,
                 size:(fileData.metadataFile.size),
                 contentType:fileData.metadataFile.contentType,
-                user: fileData.metadataFile.user
+                user: fileData.metadataFile.user,
+             //   stateCopy: fileData.metadataFile.stateCopy
                
             }
 
@@ -246,7 +234,7 @@ class Home extends Component {
                         ref={input => {
                             this.fileInput = input;
                         }} />
-                        <button className="loginBtn2 loginBtn--U" type="submit">Upload</button>
+                           <button className="loginBtn2 loginBtn--U" type="submit">Upload</button>
                         </div>
                  
                 </form>
@@ -260,7 +248,7 @@ class Home extends Component {
                         return (
                             <div key={index}>
                                 <progress value={fileObj.progressPercent} max="100"></progress>
-                                <p>{fileObj.fileName}</p>
+                                <p>{fileObj.fileName}:&nbsp;&nbsp;&nbsp;{fileObj.progressPercent}%</p>
                                 <br/>
                             </div>
                         );

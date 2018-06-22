@@ -9,7 +9,7 @@ class StorageDataTable extends Component{
     render() {
         const user = this.props.user;
         const stateCopy = this.props.stateCopy;
-    
+        
         //console.log(user.email)
         let messageNodes = this.props.rows.map((r) => {
             if(user.email === r.user){
@@ -36,6 +36,7 @@ class StorageDataTable extends Component{
                                                             </div>
                                                         </div>
                                                     )}</Popup></th>
+                                                    <th>{r.stateCopy} </th> 
                 </tr>
             )}
             else {
@@ -51,7 +52,8 @@ class StorageDataTable extends Component{
                             <th>File Name</th>
                             <th>File Type</th>
                             <th>File Size</th>     
-                            <th>Delete</th>                          
+                            <th>Delete</th>        
+                            <th>Progress</th>                                    
                         </tr>
                     </thead>
                     <tbody>

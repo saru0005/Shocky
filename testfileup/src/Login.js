@@ -85,7 +85,7 @@ renderLoginButon() {
               <label for="exampleInputPassword1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Password</label>&nbsp;&nbsp;:
               <input  value={this.state.password} onChange={this.handleChange} type="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="Password" />
             </div><br/>
-            <button type="submit" onClick={this.loginE} class="loginBtn loginBtn--L">Log in with email</button>
+            <Link to="/Home" >    <button type="submit" onClick={this.loginE} class="loginBtn loginBtn--L">Log in with email</button></Link>
              
            <button className="loginBtn loginBtn--facebook" onClick={this.login}> Log in with Facebook</button> 
             <button className="loginBtn loginBtn--google" onClick={this.login2}>Log in with Google</button> <br/><br/>
