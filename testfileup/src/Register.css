@@ -1,0 +1,128 @@
+.App {
+    text-align: center;
+  }
+  
+  .logApp {
+    text-align: right;
+  }
+  .upApp {
+    text-align: left;
+  }
+  
+  
+  .App-header {
+    background-color: #222;
+    height: 150px;
+    padding: 20px;
+    color: white;
+  }
+  
+  .App-title {
+    font-size: 1.5em;
+  }
+  
+  .App-intro {
+    font-size: large;
+  }
+  .h{
+    font-size: 30px;
+  }
+  
+  @keyframes App-logo-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  .loginBtn--N {
+    background: #F71518;
+    width: 210px;
+    text-align: left;
+  }
+  .loginBtn--N:before {
+    border-right: 009933 1px solid;
+    
+  }
+  .loginBtn--N:hover,
+  .loginBtn--N:focus {
+    background: #AC0303;
+  }
+  .loginBtn {
+    box-sizing: border-box;
+    position: relative;
+    margin: 0.2em;
+    padding: 0 15px 0 46px;
+    border: none;
+    text-align: left;
+    line-height: 34px;
+    white-space: nowrap;
+    border-radius: 0.2em;
+    font-size: 16px;
+    color: #FFF;
+  }
+  .loginBtn--O {
+    background: #F71518;
+    width: 210px;
+    text-align: left;
+  }
+  .loginBtn--O:before {
+    border-right: 009933 1px solid;
+    
+  }
+  .loginBtn--O:hover,
+  .loginBtn--O:focus {
+    background: #1D1E1E;
+  }
+  .loginBtn--U {
+    background: #131414;
+    width: 210px;
+    text-align: left;
+  }
+  .loginBtn--U:before {
+    border-right: 009933 1px solid;
+    
+  }
+  .loginBtn--U:hover,
+  .loginBtn--U:focus {
+    background: #bbbbbb;
+  }
+  .p{
+    font-size: 30px;
+    color : yellow;
+  }
+  .showprogress{
+    width: auto;
+    height: 800px;
+    overflow: auto;
+  
+  }
+  .barPro{
+    width: auto;
+    height: 400px;
+    overflow: auto;
+    color: yellow
+  }
+  .inpc{
+    color: yellow
+  }
+  .fontS{
+font-size:5em;
+color: blue;    
+  }
+  .container2{
+    
+    padding:2em;
+    text-align: center;
+    max-width: 100%;
+    width: 300px;
+    height: 320px;
+    border: 1px solid #FFFFFF;
+    border-radius: 10px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  
+  }
+  .wrapper{
+    box-shadow: 0 0 15px 0 rgba(72,94,116,0.7);
+    background:#FFFFFF;
+  }

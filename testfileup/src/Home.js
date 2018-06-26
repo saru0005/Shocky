@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import fire from './config/Fire';
-import './App.css';
+import './home.css';
 import { Link } from 'react-router-dom'
-
+import logo from './config/Ling logo.png';
 import {auth} from './config/Fire';
 
 //Import StorageDataTable
@@ -71,7 +71,6 @@ class Home extends Component {
         var metadata = {
             contentType: file.type
         };
-        
         var uploadTask = this.strRef.child(`images/${file.name}`).put(file, metadata);
 
         uploadTask.on("state_changed", (snapshot) => {
@@ -81,7 +80,7 @@ class Home extends Component {
             console.log(`Upload #${index} is ${progressPercent}% done`);
             var stateCopy = Object.assign({}, this.state);
             stateCopy.uploadFilesObj[fileObjKey].progressPercent = progressPercent;
-            this.setState(stateCopy);
+            this.setState(stateCopy);  
             switch (snapshot.state) {
                 case fire.storage.TaskState.PAUSED:
                     console.log('Upload is paused');
@@ -89,6 +88,8 @@ class Home extends Component {
                 case fire.storage.TaskState.RUNNING:
                     //console.log('Upload is running');
                     break;
+                case fire.storage.TaskState.CANCEL:
+                break;
                 default:
                     console.log('No default');
             }
@@ -102,17 +103,21 @@ class Home extends Component {
             // Complete handling
             console.log(`Upload #${index} completed`);
             var stateCopy = Object.assign({}, this.state);
+            const timestamp = Date.now();
             stateCopy.uploadFilesObj[fileObjKey].progressPercent = 100;
+     
             this.setState(stateCopy);
-             //Get metadata
-             this.strRef.child(`images/${file.name}`).getMetadata().then((metadata) => {
+            console.log(new Intl.DateTimeFormat('en-US', {year: 'numeric', month: '2-digit',day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit'}).format(timestamp));
+            //Get metadata
+            this.strRef.child(`images/${file.name}`).getMetadata().then((metadata) => {
                 // Metadata now contains the metadata for 'filepond/${file.name}'
                 let metadataFile = { 
                     name: metadata.name, 
                     size: metadata.size, 
                     contentType: metadata.contentType, 
                     user:  this.state.user.email,
-                   // stateCopy: this.state.stateCopy
+                   timestamp: new Intl.DateTimeFormat('en-US', {year: 'numeric', month: '2-digit',day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit'}).format(timestamp)
+               //  stateCopy: this.state.stateCopy
                 }
     
                 //Process save metadata
@@ -120,6 +125,7 @@ class Home extends Component {
                 databaseRef.push({  metadataFile });
     
             })
+           
 
             // Delay before delete file from state
          //   setTimeout(() => {
@@ -193,6 +199,7 @@ class Home extends Component {
                 size:(fileData.metadataFile.size),
                 contentType:fileData.metadataFile.contentType,
                 user: fileData.metadataFile.user,
+               timestamp:(fileData.metadataFile.timestamp),
              //   stateCopy: fileData.metadataFile.stateCopy
                
             }
@@ -209,22 +216,18 @@ class Home extends Component {
 
     renderUpload(){
         if (this.state.user) {  
-            const { rows, filesMetadata, user,stateCopy } = this.state;
+            const { rows, filesMetadata, user } = this.state;
             const {uploadFilesObj} = this.state;
             return (
                 <div class="App-div.container">
-                   
+                   <img src={logo} className="App-logo" alt="logo" />
+                   <div class="p">
+                            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Hi ♥ {this.state.user.displayName || this.state.user.email }&nbsp;&nbsp;&nbsp;&nbsp;</p> 
+                            <Link to="/" ><button className="loginBtn--N" onClick = {this.logout}>Logout</button></Link>  
+                            </div>                 
+                            <hr/>
                     <nav class="App-nav">
                         <section className="App-item">
-                        <br />  <br />
-                        <div class="p">
-                            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;User : {this.state.user.displayName || this.state.user.email }&nbsp;&nbsp;&nbsp;&nbsp;</p> <br />
-                            </div>
-                            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                                 <Link to="/" ><button className="loginBtn loginBtn--N" onClick = {this.logout}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Logout</button></Link>  
-                            <br /><br /><br /><br />
-                            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                           
                             <form onSubmit={this.uploadSubmit}>
                             <div class="inpc">
                     <input 
@@ -235,6 +238,7 @@ class Home extends Component {
                             this.fileInput = input;
                         }} />
                            <button className="loginBtn2 loginBtn--U" type="submit">Upload</button>
+                        
                         </div>
                  
                 </form>
@@ -247,8 +251,8 @@ class Home extends Component {
                         const fileObj = uploadFilesObj[key];
                         return (
                             <div key={index}>
-                                <progress value={fileObj.progressPercent} max="100"></progress>
-                                <p>{fileObj.fileName}:&nbsp;&nbsp;&nbsp;{fileObj.progressPercent}%</p>
+                                <progress value={fileObj.progressPercent} max="100"></progress>&nbsp; &nbsp;{fileObj.progressPercent}%
+                                <p>{fileObj.fileName}</p>
                                 <br/>
                             </div>
                         );
@@ -259,7 +263,6 @@ class Home extends Component {
                     </nav>
                     <section className="display-item">
                         <article className="App-article">
-                            <br /><br />
                             <div class="showprogress">
      
                       <StorageDataTable
@@ -267,9 +270,11 @@ class Home extends Component {
                         filesMetadata={filesMetadata}
                        user={user}
                        deleteData={this.deleteMetaDataFromDatabase}
+
                     /> </div>
                         </article>
                     </section>
+                    
                 </div>
                 
             );

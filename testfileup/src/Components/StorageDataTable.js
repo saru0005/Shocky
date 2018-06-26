@@ -8,7 +8,7 @@ class StorageDataTable extends Component{
     }
     render() {
         const user = this.props.user;
-        const stateCopy = this.props.stateCopy;
+   
         
         //console.log(user.email)
         let messageNodes = this.props.rows.map((r) => {
@@ -18,8 +18,10 @@ class StorageDataTable extends Component{
                 <tr key={r.no + r.name}>
                     <th>{r.name}</th>
                     <th>{r.contentType}</th>
-                    <th>{r.size} </th>                  
-                    <th><Popup trigger={<button className="button"> Delete </button>} modal>
+                    <th className="mbt">{((r.size)/1000000).toFixed(3)}</th>       
+                    <th>{r.timestamp} </th>   
+                    <th>{r.timestamp} </th>            
+                    <th className="tht"><Popup trigger={<button className="button"> Delete </button>} modal>
                                                     {close => (
                                                         <div className="Dmodal">
                                                             <div className="Dheader"> Do you want to Delete </div>
@@ -36,7 +38,8 @@ class StorageDataTable extends Component{
                                                             </div>
                                                         </div>
                                                     )}</Popup></th>
-                                                    <th>{r.stateCopy} </th> 
+                                                  
+                                        
                 </tr>
             )}
             else {
@@ -48,12 +51,14 @@ class StorageDataTable extends Component{
             <div>
                 <table id="t01">
                     <thead>
-                        <tr>
-                            <th>File Name</th>
-                            <th>File Type</th>
-                            <th>File Size</th>     
-                            <th>Delete</th>        
-                            <th>Progress</th>                                    
+                        <tr >
+                            <th className="tht">File Name</th>
+                            <th className="tht">File Type</th>
+                            <th className="tht">File Size<br/>(MB)</th> 
+                            <th className="tht">Date</th>      
+                            <th className="tht">Preview</th>    
+                            <th className="tht">Delete</th>        
+                                                           
                         </tr>
                     </thead>
                     <tbody>

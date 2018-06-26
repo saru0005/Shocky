@@ -33,7 +33,7 @@ class Reset extends Component {
             <img src={logo} className="App-logo" alt="logo" />  
             <div class="form-group"><br/>
             <input  value={this.state.email} onChange={this.handleChange} type="email" name="email" placeholder="Enter email" /><br/><br/><br/>
-          <button type="submit" onClick={this.resetPass} class="loginBtn loginBtn--L">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ยืนยัน</button> <br/> <br/>
+          <button type="submit" onClick={this.resetPass} class="loginBtn loginBtn--L">ยืนยัน</button> <br/> <br/>
           <Link to="/" >Back</Link> 
     </div>
     <div class="form-group">

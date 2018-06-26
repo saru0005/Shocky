@@ -10,11 +10,13 @@
     "firebase": "^5.0.4",
     "rc-progress": "^2.2.5",
     "react": "^16.4.0",
+    "react-bootstrap": "^0.32.1",
     "react-dom": "^16.4.0",
     "react-filepond": "^2.0.6",
     "react-popup": "^0.9.3",
     "react-router-dom": "^4.3.1",
     "react-scripts": "1.1.4",
+    "react-timestamp": "^4.4.0",
     "reactjs-popup": "^1.1.1"
   },
   "scripts": {

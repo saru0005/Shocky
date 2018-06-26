@@ -84,22 +84,3 @@
 .loginBtn--U:focus {
   background: #bbbbbb;
 }
-.p{
-  font-size: 30px;
-  color : yellow;
-}
-.showprogress{
-  width: auto;
-  height: 800px;
-  overflow: auto;
-
-}
-.barPro{
-  width: auto;
-  height: 400px;
-  overflow: auto;
-  color: yellow
-}
-.inpc{
-  color: yellow
-}
