@@ -9,7 +9,7 @@ import IconPause from './IconPause.png';
 import IconPlay from './IconPlay.png';
 //Import StorageDataTable
 import StorageDataTable from './Components/StorageDataTable';
-
+import Popup from "reactjs-popup";
 
 class Home extends Component {
     constructor(props) {
@@ -58,17 +58,20 @@ class Home extends Component {
             });
             this.setState({
                 uploadFilesObj: tempUploadFilesObj
+            }, () => {
+                // Upload each files & update progress
+                allFiles.forEach((file, index) => {
+                    this.uploadFile(file, index)
+                });
             });
-            // Upload each files & update progress
-            allFiles.forEach((file, index) => {
-                this.uploadFile(file, index)
-            });
+
         }
 
 
     }
     //new muti upload C.
     uploadFile(file, index) {
+        var m44 = this;
         var fileObjKey = `file${index}`;
         var metadata = {
             contentType: file.type
@@ -83,19 +86,16 @@ class Home extends Component {
             var stateCopy = Object.assign({}, this.state);
             stateCopy.uploadFilesObj[fileObjKey].progressPercent = progressPercent;
             this.setState(stateCopy);
-            console.log("Test02")
-            // function MyFunction(){
-            //     stateCopy.uploadFilesObj[fileObjKey]=   uploadTask.cancel();
-            
+
             switch (snapshot.state) {
+                case fire.storage.TaskState.CANCELED:
+                    console.log('Testttttttttttttttttt')
+                    break;
                 case fire.storage.TaskState.PAUSED:
                     console.log('Upload is paused');
                     break;
                 case fire.storage.TaskState.RUNNING:
-                    //console.log('Upload is running');
-                    break;
-                case fire.storage.TaskState.CANCEL:
-                   
+                    console.log('Upload is running');
                     break;
                 default:
                     console.log('No default');
@@ -105,7 +105,9 @@ class Home extends Component {
             console.log(error);
             var stateCopy = Object.assign({}, this.state);
             stateCopy.uploadFilesObj[fileObjKey].progressPercent = 0;
+            delete stateCopy.uploadFilesObj[fileObjKey];
             this.setState(stateCopy);
+
         }, () => {
             // Complete handling
             console.log(`Upload #${index} completed`);
@@ -134,27 +136,37 @@ class Home extends Component {
             })
 
 
-            // Delay before delete file from state
+            // // Delay before delete file from state
             //   setTimeout(() => {
             //       delete stateCopy.uploadFilesObj[fileObjKey];
             //       this.setState(stateCopy);
             //   }, 0.5);
         });
-      
-        setTimeout(() => {
-            var uploadTaskS = Object.assign({}, this.state); 
-            uploadTaskS.uploadFilesObj[fileObjKey].uploadTask = uploadTask;
-            this.setState(uploadTaskS);
-            console.log(uploadTaskS)
-        }, 1500);
+        var uploadTaskS = Object.assign({}, this.state);
+        uploadTaskS.uploadFilesObj[fileObjKey].uploadTask = uploadTask;
+        this.setState(uploadTaskS);
+        console.log(uploadTaskS);
 
-        
     }
-myFunction(){
-console.log("WTH")
+    btnCancel(fileId) {
+        // console.log(fileId)
+        var uploadTaskS = Object.assign({}, this.state);
+        var uploadTask = uploadTaskS.uploadFilesObj[fileId].uploadTask;
+        uploadTask.cancel();
 
-}
-
+    }
+    btnPlay(fileId) {
+        // console.log(fileId)
+        var uploadTaskS = Object.assign({}, this.state);
+        var uploadTask = uploadTaskS.uploadFilesObj[fileId].uploadTask;
+        uploadTask.resume();
+    }
+    btnPause(fileId) {
+        // console.log(fileId)
+        var uploadTaskS = Object.assign({}, this.state);
+        var uploadTask = uploadTaskS.uploadFilesObj[fileId].uploadTask;
+        uploadTask.pause();
+    }
     componentWillMount() {
         this.getMetaDataFromDatabase()
     }
@@ -272,10 +284,10 @@ console.log("WTH")
                                         return (
                                             <div key={index}>
                                                 <progress value={fileObj.progressPercent} max="100"></progress>&nbsp; &nbsp;{fileObj.progressPercent}%
-                                <button type="button"><img src={IconCancel} className="IconCancel" onClick={this.myFunction} alt="Icon" /></button>
-                
-                                                {/* <button type="button"><img src={IconPause} className="IconCancel" onClick={fileObj.uploadTask.pause()} alt="Icon"/></button>
-                                <button type="button"><img src={IconPlay} className="IconCancel" onClick={fileObj.uploadTask.play()} alt="Icon"/></button> */}
+                                                 <button type="button" ><img src={IconCancel} className="IconCancel" onClick={() => this.btnCancel(key)} alt="Icon" /></button>
+
+                                                <button type="button"><img src={IconPause} className="IconCancel" onClick={() => this.btnPause(key)} alt="Icon" /></button>
+                                                <button type="button"><img src={IconPlay} className="IconCancel" onClick={() => this.btnPlay(key)} alt="Icon" /></button>
                                                 <p>{fileObj.fileName}</p>
                                                 <br />
                                             </div>
