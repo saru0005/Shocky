@@ -25,13 +25,10 @@ exports.onFileChange= functions.storage.object().onFinalize(event => {
     return destBucket.file(filePath).download({
         destination: tmpFilePath
     }).then(() => {
-        return spawn('convert', [tmpFilePath, '-resize', '500x500', tmpFilePath]);
-        spawn('convert', [tmpFilePath, '-resize', '750x750', tmpFilePath]);
-        spawn('convert', [tmpFilePath, '-resize', '1000x1000', tmpFilePath]);
+        return spawn('convert', [tmpFilePath, '-resize', '64x64', tmpFilePath]);
+
     }).then(() => {
         return destBucket.upload(tmpFilePath, {
-            destination: 'resized-' + path.basename(filePath),
-            destination: 'resized-' + path.basename(filePath),
             destination: 'resized-' + path.basename(filePath),
             metadata: metadata
         })
