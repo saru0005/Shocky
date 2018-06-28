@@ -88,15 +88,16 @@ class Home extends Component {
             this.setState(stateCopy);
 
             switch (snapshot.state) {
-                case fire.storage.TaskState.CANCELED:
-                    console.log('Testttttttttttttttttt')
-                    break;
                 case fire.storage.TaskState.PAUSED:
                     console.log('Upload is paused');
                     break;
                 case fire.storage.TaskState.RUNNING:
                     console.log('Upload is running');
                     break;
+                case fire.storage.TaskState.CANCELED:
+                console.log('test')
+                 delete stateCopy.uploadFilesObj[fileObjKey];
+                  this.setState(stateCopy);
                 default:
                     console.log('No default');
             }
@@ -114,7 +115,6 @@ class Home extends Component {
             var stateCopy = Object.assign({}, this.state);
             const timestamp = Date.now();
             stateCopy.uploadFilesObj[fileObjKey].progressPercent = 100;
-
             this.setState(stateCopy);
             // console.log(new Intl.DateTimeFormat('en-US', {year: 'numeric', month: '2-digit',day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit'}).format(timestamp));
             //Get metadata
@@ -138,8 +138,8 @@ class Home extends Component {
 
             // // Delay before delete file from state
             //   setTimeout(() => {
-            //       delete stateCopy.uploadFilesObj[fileObjKey];
-            //       this.setState(stateCopy);
+                //   delete stateCopy.uploadFilesObj[fileObjKey];
+                //   this.setState(stateCopy);
             //   }, 0.5);
         });
         var uploadTaskS = Object.assign({}, this.state);
@@ -284,7 +284,30 @@ class Home extends Component {
                                         return (
                                             <div key={index}>
                                                 <progress value={fileObj.progressPercent} max="100"></progress>&nbsp; &nbsp;{fileObj.progressPercent}%
-                                                 <button type="button" ><img src={IconCancel} className="IconCancel" onClick={() => this.btnCancel(key)} alt="Icon" /></button>
+                                            
+
+                                                 <Popup trigger={<button className="button"> <img src={IconCancel} className="IconCancel"  alt="Icon" /> </button>} modal>
+                                                    {close => (
+                                                        <div className="Dmodal">
+                                                            <div className="Dheader"> Do you want to Delete </div>
+                                                            <div className="Dactions">
+                                                                <button className="button" onClick={() =>
+                                                                    {
+                                                                    
+                                                                     this.btnCancel(key)
+                                                                     close()
+                                                                 } }>Yes</button>
+                                                                <button
+                                                                    className="button"
+                                                                    onClick={() => {
+                                                                        console.log('modal closed')
+                                                                        close()
+                                                                    }}
+                                                                >
+                                                                    No</button>
+                                                            </div>
+                                                        </div>
+                                                    )}</Popup>
 
                                                 <button type="button"><img src={IconPause} className="IconCancel" onClick={() => this.btnPause(key)} alt="Icon" /></button>
                                                 <button type="button"><img src={IconPlay} className="IconCancel" onClick={() => this.btnPlay(key)} alt="Icon" /></button>
