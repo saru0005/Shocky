@@ -1,12 +1,12 @@
 import firebase from 'firebase';
 
   const config = {
-    apiKey: "AIzaSyDVALuvtcQllCUjgkDG7T-8OdWHQKJ3b0U",
-    authDomain: "filetestnew.firebaseapp.com",
-    databaseURL: "https://filetestnew.firebaseio.com",
-    projectId: "filetestnew",
-    storageBucket: "filetestnew.appspot.com",
-    messagingSenderId: "712952157291"
+    apiKey: "AIzaSyBvnADLOdavvIGW3gKrOEdsF9vwTo5z0kU",
+    authDomain: "lingdrone-intern.firebaseapp.com",
+    databaseURL: "https://lingdrone-intern.firebaseio.com",
+    projectId: "lingdrone-intern",
+    storageBucket: "lingdrone-intern.appspot.com",
+    messagingSenderId: "368870928255"
   };
   firebase.initializeApp(config);
   export const ref = firebase.database().ref()

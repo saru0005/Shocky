@@ -35,7 +35,7 @@ class StorageDataTable extends Component{
             return (
                 
                 <tr key={r.no + r.name}>
-                    <th>{r.name}</th>
+                    <th >{r.name}</th>
                     <th>{r.contentType}</th>
                     <th className="mbt">{((r.size)/1000000).toFixed(3)}</th>       
                     <th>{r.timestamp} </th>   
