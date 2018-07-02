@@ -73,11 +73,12 @@ class Home extends Component {
     }
     //new muti upload C.
     uploadFile(file, index) {
-
+        var _this = this;
         var fileObjKey = `file${index}`;
         var metadata = {
             contentType: file.type
         };
+        var thisSpecialStrref = this;
         var uploadTask = this.strRef.child(`images/${file.name}`).put(file, metadata);
 
         uploadTask.on("state_changed", (snapshot) => {
@@ -120,13 +121,22 @@ class Home extends Component {
             this.setState(stateCopy);
             // console.log(new Intl.DateTimeFormat('en-US', {year: 'numeric', month: '2-digit',day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit'}).format(timestamp));
             //Get metadata
-            this.strRef.child(`images/${file.name}`).getMetadata().then((metadata) => {
-                // Metadata now contains the metadata for 'filepond/${file.name}'
+            uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+                console.log('File available at', downloadURL);
+                
+            
+              
+            // console.log(new Intl.DateTimeFormat('en-US', {year: 'numeric', month: '2-digit',day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit'}).format(timestamp));
+            //Get metadata
+            thisSpecialStrref.strRef.child(`images/${file.name}`).getMetadata().then((metadata) => {
+                
+                
                 let metadataFile = {
                     name: metadata.name,
                     size: metadata.size,
                     contentType: metadata.contentType,
-                    user: this.state.user.email,
+                    user: thisSpecialStrref.state.user.email,
+                    pic64: downloadURL,
                     timestamp: new Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(timestamp)
                     //  stateCopy: this.state.stateCopy
                 }
@@ -134,8 +144,10 @@ class Home extends Component {
                 //Process save metadata
                 const databaseRef = fire.database().ref('/image');
                 databaseRef.push({ metadataFile });
-
-            })
+                
+                // Delay before delete file from state
+                
+            })  });
 
 
             // // Delay before delete file from state
@@ -143,6 +155,7 @@ class Home extends Component {
             //   delete stateCopy.uploadFilesObj[fileObjKey];
             //   this.setState(stateCopy);
             //   }, 0.5);
+     
         });
         var uploadTaskS = Object.assign({}, this.state);
         uploadTaskS.uploadFilesObj[fileObjKey].uploadTask = uploadTask;
@@ -176,7 +189,7 @@ class Home extends Component {
     //โหลดข้อมูล Metadata จาก Firebase
     getMetaDataFromDatabase() {
         //    console.log("getMetaDataFromDatabase");
-        const nameref = fire.database().ref('image').orderByChild('metadataFile/name');
+        const nameref = fire.database().ref('image');
 
         nameref.on('value', (snapshot) => {
             let rows = [];
@@ -187,7 +200,7 @@ class Home extends Component {
                     key: childSnapshot.key,
                     name: childSnapshot.val().metadataFile.name,
                     user: childSnapshot.val().metadataFile.user,
-                    // pic64: childSnapshot.val().metadataFile.pic64,
+                    pic64: childSnapshot.val().metadataFile.pic64,
                     contentType: childSnapshot.val().metadataFile.contentType,
                     size: childSnapshot.val().metadataFile.size,
                     timestamp: childSnapshot.val().metadataFile.timestamp
@@ -214,7 +227,7 @@ class Home extends Component {
                     key: childSnapshot.key,
                     name: childSnapshot.val().metadataFile.name,
                     user: childSnapshot.val().metadataFile.user,
-                    // pic64: childSnapshot.val().metadataFile.pic64,
+                    pic64: childSnapshot.val().metadataFile.pic64,
                     contentType: childSnapshot.val().metadataFile.contentType,
                     size: childSnapshot.val().metadataFile.size,
                     timestamp: childSnapshot.val().metadataFile.timestamp
@@ -239,10 +252,10 @@ class Home extends Component {
             snapshot.forEach(function (childSnapshot) {
                 rows.push({
 
-                    key: childSnapshot.key,
+                      key: childSnapshot.key,
                     name: childSnapshot.val().metadataFile.name,
                     user: childSnapshot.val().metadataFile.user,
-                    // pic64: childSnapshot.val().metadataFile.pic64,
+                    pic64: childSnapshot.val().metadataFile.pic64,
                     contentType: childSnapshot.val().metadataFile.contentType,
                     size: childSnapshot.val().metadataFile.size,
                     timestamp: childSnapshot.val().metadataFile.timestamp
@@ -321,7 +334,7 @@ class Home extends Component {
 
     renderUpload() {
         if (this.state.user) {
-            const { rows, filesMetadata, user } = this.state;
+            const { rows, filesMetadata, user, downloadURL } = this.state;
             const { uploadFilesObj } = this.state;
             return (
                 <div class="App-div.container">

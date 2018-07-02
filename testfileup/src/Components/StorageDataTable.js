@@ -39,7 +39,7 @@ class StorageDataTable extends Component{
                     <th>{r.contentType}</th>
                     <th className="mbt">{((r.size)/1000000).toFixed(3)}</th>       
                     <th>{r.timestamp} </th>   
-                    <th>{r.timestamp} </th>            
+                    <th className="tht"><div><img  src = {r.pic64} width ='64' height = '64' alt = "pic64*64" /></div></th>           
                     <th className="tht"><Popup trigger={<button className="button"> Delete </button>} modal>
                                                     {close => (
                                                         <div className="Dmodal">
