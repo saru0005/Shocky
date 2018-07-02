@@ -17,6 +17,8 @@ class Home extends Component {
         this.logout = this.logout.bind(this);
         this.uploadSubmit = this.uploadSubmit.bind(this);
         this.uploadFile = this.uploadFile.bind(this);
+        this.sortsize = this.sortsize.bind(this);
+        this.sortname = this.sortname.bind(this);
         this.strRef = fire.storage().ref();
         this.state = {
             files: [], //ใช้เก็บข้อมูล File ที่ Upload
@@ -71,7 +73,7 @@ class Home extends Component {
     }
     //new muti upload C.
     uploadFile(file, index) {
-        var m44 = this;
+
         var fileObjKey = `file${index}`;
         var metadata = {
             contentType: file.type
@@ -95,9 +97,9 @@ class Home extends Component {
                     console.log('Upload is running');
                     break;
                 case fire.storage.TaskState.CANCELED:
-                console.log('test')
-                 delete stateCopy.uploadFilesObj[fileObjKey];
-                  this.setState(stateCopy);
+                    console.log('test')
+                    delete stateCopy.uploadFilesObj[fileObjKey];
+                    this.setState(stateCopy);
                 default:
                     console.log('No default');
             }
@@ -138,8 +140,8 @@ class Home extends Component {
 
             // // Delay before delete file from state
             //   setTimeout(() => {
-                //   delete stateCopy.uploadFilesObj[fileObjKey];
-                //   this.setState(stateCopy);
+            //   delete stateCopy.uploadFilesObj[fileObjKey];
+            //   this.setState(stateCopy);
             //   }, 0.5);
         });
         var uploadTaskS = Object.assign({}, this.state);
@@ -174,16 +176,87 @@ class Home extends Component {
     //โหลดข้อมูล Metadata จาก Firebase
     getMetaDataFromDatabase() {
         //    console.log("getMetaDataFromDatabase");
-        const databaseRef = fire.database().ref('/image');
+        const nameref = fire.database().ref('image').orderByChild('metadataFile/name');
 
-        databaseRef.on('value', snapshot => {
+        nameref.on('value', (snapshot) => {
+            let rows = [];
+
+            snapshot.forEach(function (childSnapshot) {
+                rows.push({
+
+                    key: childSnapshot.key,
+                    name: childSnapshot.val().metadataFile.name,
+                    user: childSnapshot.val().metadataFile.user,
+                    // pic64: childSnapshot.val().metadataFile.pic64,
+                    contentType: childSnapshot.val().metadataFile.contentType,
+                    size: childSnapshot.val().metadataFile.size,
+                    timestamp: childSnapshot.val().metadataFile.timestamp
+                });
+            });
+
             this.setState({
-                filesMetadata: snapshot.val()
-            }, () => this.addMetadataToList());
+                rows: rows
+            });
+            console.log(rows)
+        });
+    }
+    //sort size
+    sortsize() {
+        //    console.log("getMetaDataFromDatabase");
+        const nameref = fire.database().ref('image').orderByChild('metadataFile/size');
+
+        nameref.on('value', (snapshot) => {
+            let rows = [];
+
+            snapshot.forEach(function (childSnapshot) {
+                rows.push({
+
+                    key: childSnapshot.key,
+                    name: childSnapshot.val().metadataFile.name,
+                    user: childSnapshot.val().metadataFile.user,
+                    // pic64: childSnapshot.val().metadataFile.pic64,
+                    contentType: childSnapshot.val().metadataFile.contentType,
+                    size: childSnapshot.val().metadataFile.size,
+                    timestamp: childSnapshot.val().metadataFile.timestamp
+                });
+            });
+
+            this.setState({
+                rows: rows
+            });
+            console.log(rows)
+        });
+    }
+
+      //sort name
+      sortname() {
+        //    console.log("getMetaDataFromDatabase");
+        const nameref = fire.database().ref('image').orderByChild('metadataFile/name');
+
+        nameref.on('value', (snapshot) => {
+            let rows = [];
+
+            snapshot.forEach(function (childSnapshot) {
+                rows.push({
+
+                    key: childSnapshot.key,
+                    name: childSnapshot.val().metadataFile.name,
+                    user: childSnapshot.val().metadataFile.user,
+                    // pic64: childSnapshot.val().metadataFile.pic64,
+                    contentType: childSnapshot.val().metadataFile.contentType,
+                    size: childSnapshot.val().metadataFile.size,
+                    timestamp: childSnapshot.val().metadataFile.timestamp
+                });
+            });
+
+            this.setState({
+                rows: rows
+            });
+            console.log(rows)
         });
     }
     //ลบข้อมูล Metada จาก Firebase
-    deleteMetaDataFromDatabase(e, rowData) {
+    deleteMetaDataFromDatabase( rowData) {
 
         const storageRef = fire.storage().ref(`images/${rowData.name}`);
 
@@ -198,7 +271,7 @@ class Home extends Component {
                 databaseRef.child(rowData.key).remove()
                     .then(() => {
                         console.log("Delete metada success");
-                        this.getMetaDataFromDatabase()
+                       
                     })
                     .catch((error) => {
                         console.log("Delete metada error : ", error.message);
@@ -213,37 +286,37 @@ class Home extends Component {
 
     }
 
-    addMetadataToList() {
-        let i = 1;
-        let rows = [];
+    // addMetadataToList() {
+    //     let i = 1;
+    //     let rows = [];
 
-        //Loop add data to rows
-        for (let key in this.state.filesMetadata) {
+    //     //Loop add data to rows
+    //     for (let key in this.state.filesMetadata) {
 
-            let fileData = this.state.filesMetadata[key];
+    //         let fileData = this.state.filesMetadata[key];
 
-            let objRows = {
-                no: i++,
-                key: key, //ใช้เพื่อ Delete
-                name: fileData.metadataFile.name,
-                fullPath: fileData.metadataFile.fullPath,
-                size: (fileData.metadataFile.size),
-                contentType: fileData.metadataFile.contentType,
-                user: fileData.metadataFile.user,
-                timestamp: (fileData.metadataFile.timestamp),
-                //   stateCopy: fileData.metadataFile.stateCopy
+    //         let objRows = {
+    //             no: i++,
+    //             key: key, //ใช้เพื่อ Delete
+    //             name: fileData.metadataFile.name,
+    //             fullPath: fileData.metadataFile.fullPath,
+    //             size: (fileData.metadataFile.size),
+    //             contentType: fileData.metadataFile.contentType,
+    //             user: fileData.metadataFile.user,
+    //             timestamp: (fileData.metadataFile.timestamp),
+    //             //   stateCopy: fileData.metadataFile.stateCopy
 
-            }
+    //         }
 
-            rows.push(objRows)
-        }
+    //         rows.push(objRows)
+    //     }
 
-        this.setState({
-            rows: rows
-        }, () => {
-            //      console.log('Set Rows')
-        })
-    }
+    //     this.setState({
+    //         rows: rows
+    //     }, () => {
+    //         //      console.log('Set Rows')
+    //     })
+    // }
 
 
     renderUpload() {
@@ -270,7 +343,6 @@ class Home extends Component {
                                             this.fileInput = input;
                                         }} />
                                     <button className="loginBtn2 loginBtn--U" type="submit">Upload</button>
-
                                 </div>
 
                             </form>
@@ -284,19 +356,18 @@ class Home extends Component {
                                         return (
                                             <div key={index}>
                                                 <progress value={fileObj.progressPercent} max="100"></progress>&nbsp; &nbsp;{fileObj.progressPercent}%
-                                            
 
-                                                 <Popup trigger={<button className="button"> <img src={IconCancel} className="IconCancel"  alt="Icon" /> </button>} modal>
+
+                                                 <Popup trigger={<button className="button"> <img src={IconCancel} className="IconCancel" alt="Icon" /> </button>} modal>
                                                     {close => (
                                                         <div className="Dmodal">
-                                                            <div className="Dheader"> Do you want to Delete </div>
+                                                            <div className="Dheader"> Do you want to Cancel </div>
                                                             <div className="Dactions">
-                                                                <button className="button" onClick={() =>
-                                                                    {
-                                                                    
-                                                                     this.btnCancel(key)
-                                                                     close()
-                                                                 } }>Yes</button>
+                                                                <button className="button" onClick={() => {
+
+                                                                    this.btnCancel(key)
+                                                                    close()
+                                                                }}>Yes</button>
                                                                 <button
                                                                     className="button"
                                                                     onClick={() => {
@@ -329,7 +400,8 @@ class Home extends Component {
                                     filesMetadata={filesMetadata}
                                     user={user}
                                     deleteData={this.deleteMetaDataFromDatabase}
-
+                                    sortsize={this.sortsize}
+                                    sortname={this.sortname}
                                 /> </div>
                         </article>
                     </section>
