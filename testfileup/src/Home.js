@@ -120,47 +120,86 @@ class Home extends Component {
             stateCopy.uploadFilesObj[fileObjKey].progressPercent = 100;
             this.setState(stateCopy);
             // console.log(new Intl.DateTimeFormat('en-US', {year: 'numeric', month: '2-digit',day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit'}).format(timestamp));
-            //Get metadata
-            uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
-                console.log('File available at', downloadURL);
-                
-            
-              
-            // console.log(new Intl.DateTimeFormat('en-US', {year: 'numeric', month: '2-digit',day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit'}).format(timestamp));
-            //Get metadata
-            thisSpecialStrref.strRef.child(`images/${file.name}`).getMetadata().then((metadata) => {
-                
-                
-                let metadataFile = {
-                    name: metadata.name,
-                    size: metadata.size,
-                    contentType: metadata.contentType,
-                    user: thisSpecialStrref.state.user.email,
-                    pic64: downloadURL,
-                    timestamp: new Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(timestamp)
-                    //  stateCopy: this.state.stateCopy
-                }
+            var originalName = file.name // 01.jpg
+            var resized64 = "resized-" + originalName; // resized512_01.jpg
+            var resized64Path = "64/" + resized64; // resized/....^
+            var resized512 = "resized-" + originalName; // resized512_01.jpg
+            var resized512Path = "512/" + resized512; // resized/....^
+            setTimeout(function () {
+                thisSpecialStrref.strRef.child(resized512Path).getDownloadURL().then(function (downloadURL3) {
+                thisSpecialStrref.strRef.child(resized512Path).getDownloadURL().then(function (downloadURL2) {
+                    thisSpecialStrref.strRef.child(resized64Path).getDownloadURL().then(function (downloadURL) {
+                        //Get metadata
+                        thisSpecialStrref.strRef.child(`images/${file.name}`).getMetadata().then((metadata) => {
 
-                //Process save metadata
-                const databaseRef = fire.database().ref('/image');
-                databaseRef.push({ metadataFile });
-                
-                // Delay before delete file from state
-                
-            })  });
 
+                            let metadataFile = {
+                                name: metadata.name,
+                                size: metadata.size,
+                                contentType: metadata.contentType,
+                                user: thisSpecialStrref.state.user.email,
+                                pic64: downloadURL,
+                                pic512: downloadURL2,
+                                pic: downloadURL3,
+                                timestamp: new Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(timestamp)
+                                //  stateCopy: this.state.stateCopy
+                            }
+
+                            //Process save metadata
+                            const databaseRef = fire.database().ref('/image');
+                            databaseRef.push({ metadataFile });
+
+                            // Delay before delete file from state
+
+                        })
+                    })
+                })
+                })
+            }, 25000);
+            // //Get metadata
+            // uploadTask.snapshot.ref.getDownloadURL().then(function (downloadURL) {
+            //     console.log('File available at', downloadURL);
+
+
+
+            //     // console.log(new Intl.DateTimeFormat('en-US', {year: 'numeric', month: '2-digit',day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit'}).format(timestamp));
+            //     //Get metadata
+            //     thisSpecialStrref.strRef.child(`images/${file.name}`).getMetadata().then((metadata) => {
+
+
+            //         let metadataFile = {
+            //             name: metadata.name,
+            //             size: metadata.size,
+            //             contentType: metadata.contentType,
+            //             user: thisSpecialStrref.state.user.email,
+            //             pic64: downloadURL,
+            //             timestamp: new Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(timestamp)
+            //             //  stateCopy: this.state.stateCopy
+            //         }
+
+            //         //Process save metadata
+            //         const databaseRef = fire.database().ref('/image');
+            //         databaseRef.push({ metadataFile });
+
+            //         // Delay before delete file from state
+
+            //     })
+            // });
 
             // // Delay before delete file from state
             //   setTimeout(() => {
             //   delete stateCopy.uploadFilesObj[fileObjKey];
             //   this.setState(stateCopy);
             //   }, 0.5);
-     
+
         });
         var uploadTaskS = Object.assign({}, this.state);
         uploadTaskS.uploadFilesObj[fileObjKey].uploadTask = uploadTask;
         this.setState(uploadTaskS);
         console.log(uploadTaskS);
+
+
+
 
     }
     btnCancel(fileId) {
@@ -201,6 +240,7 @@ class Home extends Component {
                     name: childSnapshot.val().metadataFile.name,
                     user: childSnapshot.val().metadataFile.user,
                     pic64: childSnapshot.val().metadataFile.pic64,
+                    pic512: childSnapshot.val().metadataFile.pic512,
                     contentType: childSnapshot.val().metadataFile.contentType,
                     size: childSnapshot.val().metadataFile.size,
                     timestamp: childSnapshot.val().metadataFile.timestamp
@@ -228,6 +268,7 @@ class Home extends Component {
                     name: childSnapshot.val().metadataFile.name,
                     user: childSnapshot.val().metadataFile.user,
                     pic64: childSnapshot.val().metadataFile.pic64,
+                    pic512: childSnapshot.val().metadataFile.pic512,
                     contentType: childSnapshot.val().metadataFile.contentType,
                     size: childSnapshot.val().metadataFile.size,
                     timestamp: childSnapshot.val().metadataFile.timestamp
@@ -241,8 +282,8 @@ class Home extends Component {
         });
     }
 
-      //sort name
-      sortname() {
+    //sort name
+    sortname() {
         //    console.log("getMetaDataFromDatabase");
         const nameref = fire.database().ref('image').orderByChild('metadataFile/name');
 
@@ -252,10 +293,11 @@ class Home extends Component {
             snapshot.forEach(function (childSnapshot) {
                 rows.push({
 
-                      key: childSnapshot.key,
+                    key: childSnapshot.key,
                     name: childSnapshot.val().metadataFile.name,
                     user: childSnapshot.val().metadataFile.user,
                     pic64: childSnapshot.val().metadataFile.pic64,
+                    pic512: childSnapshot.val().metadataFile.pic512,
                     contentType: childSnapshot.val().metadataFile.contentType,
                     size: childSnapshot.val().metadataFile.size,
                     timestamp: childSnapshot.val().metadataFile.timestamp
@@ -269,7 +311,7 @@ class Home extends Component {
         });
     }
     //ลบข้อมูล Metada จาก Firebase
-    deleteMetaDataFromDatabase( rowData) {
+    deleteMetaDataFromDatabase(rowData) {
 
         const storageRef = fire.storage().ref(`images/${rowData.name}`);
 
@@ -284,7 +326,7 @@ class Home extends Component {
                 databaseRef.child(rowData.key).remove()
                     .then(() => {
                         console.log("Delete metada success");
-                       
+
                     })
                     .catch((error) => {
                         console.log("Delete metada error : ", error.message);

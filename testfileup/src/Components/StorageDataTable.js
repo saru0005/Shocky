@@ -7,39 +7,26 @@ class StorageDataTable extends Component{
     constructor(props){
         super(props);
     }
-    OrderName(){
-        const usersRef = fire.database().ref('image').orderByChild('metadataFile/name');
-        
-        usersRef.on('value', (snapshot) => {
-            let rows = [];
-        
-            snapshot.forEach(function(childSnapshot) {
-                rows.push({
-                    id: childSnapshot.key,
-                    name: childSnapshot.val().name,
-                    size: childSnapshot.val().size,
-                    contentType: childSnapshot.val().contentType,
-                    timestamp: childSnapshot.val().timestamp
-                });
-            });
-        
 
-        });
-    }
     render() {
         const user = this.props.user;
         
         //console.log(user.email)
         let messageNodes = this.props.rows.map((r) => {
+            var restname = 'resized-'+r.name;
             if(user.email === r.user){
             return (
-                
                 <tr key={r.no + r.name}>
                     <th >{r.name}</th>
                     <th>{r.contentType}</th>
                     <th className="mbt">{((r.size)/1000000).toFixed(3)}</th>       
                     <th>{r.timestamp} </th>   
-                    <th className="tht"><div><img  src = {r.pic64} width ='64' height = '64' alt = "pic64*64" /></div></th>           
+                    <th className="tht"><Popup trigger={<div><img  src = {r.pic64} width ='64' height = '64' alt = "pic64*64" /></div>} modal>
+                                                    {close => (
+                                                        <div className="Dmodal">
+                                                        <img  src = {r.pic512}  alt = "pic64*64" />
+                                                        </div>
+                                                    )}</Popup></th>           
                     <th className="tht"><Popup trigger={<button className="button"> Delete </button>} modal>
                                                     {close => (
                                                         <div className="Dmodal">
