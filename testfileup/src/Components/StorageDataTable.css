@@ -1,45 +1,85 @@
 .Dmodal {
-    font-size: 12px;
-  }
-  .Dmodal > .Dheader {
-    width: 99%;
-    border-bottom: 1px solid gray;
-    font-size: 18px;
-    text-align: center;
-    padding: 5px;
-  }
-  .Dmodal > .Dcontent {
-    width: 100%;
-    padding: 10px 5px;    
-  }
-  .Dmodal > .Dactions {
-    width: 100%;
-    padding: 10px 5px;
-    margin: auto;
-    text-align: center;
-    
-  }
-  .Dmodal > .Dclose {
-    cursor: pointer;
-    position: absolute;
-    display: block;
-    padding: 2px 5px;
-    line-height: 20px;
-    right: -10px;
-    top: -10px;
-    font-size: 24px;
-    background: #FFFFFF;
-    border-radius: 18px;
-    border: 2px solid #cfcece;
-  }
-  .tht{
-    text-align: center;
-    color: blue;
-    background: black
-  }
-  .mbt{
-    text-align: right;
-  }
-  .th{
-    color:red
-  }
+  font-size: 12px;
+}
+.Dmodal > .Dheader {
+  width: 99%;
+  border-bottom: 1px solid gray;
+  font-size: 18px;
+  text-align: center;
+  padding: 5px;
+}
+.Dmodal > .Dcontent {
+  width: 100%;
+  padding: 10px 5px;    
+}
+.Dmodal > .Dactions {
+  width: 100%;
+  padding: 10px 5px;
+  margin: auto;
+  text-align: center;
+  
+}
+.Dmodal > .Dclose {
+  cursor: pointer;
+  position: absolute;
+  display: block;
+  padding: 2px 5px;
+  line-height: 20px;
+  right: -10px;
+  top: -10px;
+  font-size: 24px;
+  background: #FFFFFF;
+  border-radius: 18px;
+  border: 2px solid #cfcece;
+}
+.tht{
+  text-align: center;
+  color: blue;
+}
+.tht2{
+ 
+  text-align: center;
+  color: #ffffff;
+  background: black;
+  
+}
+.mbt{
+  text-align: right;
+}
+
+table {  
+color: rgb(2, 26, 12);
+font-family: Helvetica, Arial, sans-serif;
+width: 100%; 
+border-collapse: 
+collapse; border-spacing: 5; 
+
+
+
+}
+td, th {  
+border: 1px solid transparent; /* No more visible border */
+height: 30px; 
+transition: all 0.3s;  /* Simple transition for hover effect */
+
+}
+tr:nth-child(even) {
+background-color: #EC9787
+}
+tr:nth-child(odd) {
+background-color: rgb(235, 173, 161)
+}
+.buttonDel{
+background-color: #f1f1f1;
+color: black;
+font-size: 16px;
+padding: 16px 30px;
+border: none;
+cursor: pointer;
+border-radius: 5px;
+text-align: center;
+}
+.buttonDel:hover {
+background-color: black;
+color: white;
+}

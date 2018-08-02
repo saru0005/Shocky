@@ -3,10 +3,11 @@ import './App.css';
 import { Switch, Route } from 'react-router-dom'
 //Import Firebase
 import fire from './config/Fire';
-import Home from './Home'
-import Login from './Login'
-import Register from './Register'
-import Reset from './Reset'
+import Home from './Uploads/Home'
+import Login from './LoginPage/Login'
+import Register from './RegisterTest/Register'
+import Reset from './RegisterTest/Reset'
+import UploadFolders from './Uploads/UploadFolders'
 class App extends Component {
     constructor(props){
         super(props);
@@ -45,6 +46,7 @@ class App extends Component {
           <Route exact path="/Home" component={Home} />
         <Route exact path="/Register" component={Register} />
         <Route exact path="/Reset" component={Reset} />
+        <Route exact path="/UploadFolders" component={UploadFolders} />
             </Switch>
         
           </div> 

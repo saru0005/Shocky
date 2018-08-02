@@ -16,24 +16,25 @@ class StorageDataTable extends Component{
             var restname = 'resized-'+r.name;
             if(user.email === r.user){
             return (
+                
                 <tr key={r.no + r.name}>
                     <th >{r.name}</th>
                     <th>{r.contentType}</th>
                     <th className="mbt">{((r.size)/1000000).toFixed(3)}</th>       
                     <th>{r.timestamp} </th>   
-                    <th className="tht"><Popup trigger={<div><img  src = {r.pic64}  alt = "pic64*64" /></div>} modal>
+                    <th className="tht"><Popup trigger={<div><img  src = {r.pic64} alt = "pic64*64" /></div>} modal>
                                                     {close => (
                                                         <div className="Dmodal">
                                                         <img  src = {r.pic512}  alt = "pic64*64" />
                                                         </div>
                                                     )}</Popup></th>           
-                    <th className="tht"><Popup trigger={<button className="button"> Delete </button>} modal>
+                    <th className="tht"><Popup trigger={<button className="buttonDel"> Delete </button>} modal>
                                                     {close => (
                                                         <div className="Dmodal">
                                                             <div className="Dheader"> Do you want to Delete </div>
                                                             <div className="Dactions">
                                                                 <button className="button" onClick={() => {this.props.deleteData(r)
-                                                                    close()}}>Yes</button>
+                                                                 close()}}>Yes</button>
                                                                 <button
                                                                     className="button"
                                                                     onClick={() => {
@@ -55,16 +56,16 @@ class StorageDataTable extends Component{
         });
         return (
             
-            <div>
-                <table id="t01">
+            <div className="thbor">
+                <table>
                     <thead>
                         <tr >
-                            <th className="tht"><a onClick={this.props.sortname}>File Name</a></th>
-                            <th className="tht">File Type</th>
-                            <th className="tht"><a onClick={this.props.sortsize}>File Size (MB)</a><br/></th> 
-                            <th className="tht">Date</th>      
-                            <th className="tht">Preview</th>    
-                            <th className="tht">Delete</th>        
+                            <th className="tht2"><a onClick={this.props.sortname}>File Name</a></th>
+                            <th className="tht2">File Type</th>
+                            <th className="tht2"><a onClick={this.props.sortsize}>File Size (MB)</a><br/></th> 
+                            <th className="tht2">Date</th>      
+                            <th className="tht2">Preview</th>    
+                            <th className="tht2">Delete</th>        
                                                            
                         </tr>
                     </thead>

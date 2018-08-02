@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import firebase from './config/Fire';
-import {provider,auth,provider2} from './config/Fire';
-import logo from './config/Ling logo.png';
+import firebase from '../config/Fire';
+import {provider,auth,provider2} from '../config/Fire';
+import logo from '../config/Ling logo.png';
 import './Login.css';
 import { Link } from 'react-router-dom';
 class Login extends Component {

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import firebase from './config/Fire';
-import './App.css';
+import firebase from '../config/Fire';
+import '../App.css';
 import { Link } from 'react-router-dom'
-import logo from './config/Ling logo.png';
+import logo from '../config/Ling logo.png';
 class Reset extends Component {
     constructor(props) {
         super(props);

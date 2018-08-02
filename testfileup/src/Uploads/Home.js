@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
-import fire from './config/Fire';
+import fire from '../config/Fire';
 import './home.css';
 import { Link } from 'react-router-dom'
-import logo from './config/Ling logo.png';
-import { auth } from './config/Fire';
-import IconCancel from './IconCancel.png';
-import IconPause from './IconPause.png';
-import IconPlay from './IconPlay.png';
+import logo from '../config/Ling logo.png';
+import { auth } from '../config/Fire';
+import IconCancel from '../IconCancel.png';
+import IconPause from '../IconPause.png';
+import IconPlay from '../IconPlay.png';
 //Import StorageDataTable
-import StorageDataTable from './Components/StorageDataTable';
+import StorageDataTable from '../Components/StorageDataTable';
 import Popup from "reactjs-popup";
 
 class Home extends Component {

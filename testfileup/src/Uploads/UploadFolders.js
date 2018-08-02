@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import firebase from './config/Fire';
-import './App.css';
+import firebase from '../config/Fire';
 import { Link } from 'react-router-dom'
-import logo from './config/Ling logo.png';
-class Register extends Component {
+import logo from '../config/Ling logo.png';
+class UploadFolders extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -61,4 +60,4 @@ class Register extends Component {
   }
   }
 
-export default Register;
+export default UploadFolders;
