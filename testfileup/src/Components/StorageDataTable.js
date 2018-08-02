@@ -21,7 +21,7 @@ class StorageDataTable extends Component{
                     <th>{r.contentType}</th>
                     <th className="mbt">{((r.size)/1000000).toFixed(3)}</th>       
                     <th>{r.timestamp} </th>   
-                    <th className="tht"><Popup trigger={<div><img  src = {r.pic64} width ='64' height = '64' alt = "pic64*64" /></div>} modal>
+                    <th className="tht"><Popup trigger={<div><img  src = {r.pic64}  alt = "pic64*64" /></div>} modal>
                                                     {close => (
                                                         <div className="Dmodal">
                                                         <img  src = {r.pic512}  alt = "pic64*64" />
@@ -32,7 +32,8 @@ class StorageDataTable extends Component{
                                                         <div className="Dmodal">
                                                             <div className="Dheader"> Do you want to Delete </div>
                                                             <div className="Dactions">
-                                                                <button className="button" onClick={() => this.props.deleteData(r)}>Yes</button>
+                                                                <button className="button" onClick={() => {this.props.deleteData(r)
+                                                                    close()}}>Yes</button>
                                                                 <button
                                                                     className="button"
                                                                     onClick={() => {

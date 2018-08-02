@@ -19,6 +19,7 @@ class Home extends Component {
         this.uploadFile = this.uploadFile.bind(this);
         this.sortsize = this.sortsize.bind(this);
         this.sortname = this.sortname.bind(this);
+        this.testgetURL = this.testgetURL.bind(this);
         this.strRef = fire.storage().ref();
         this.state = {
             files: [], //ใช้เก็บข้อมูล File ที่ Upload
@@ -116,46 +117,13 @@ class Home extends Component {
             // Complete handling
             console.log(`Upload #${index} completed`);
             var stateCopy = Object.assign({}, this.state);
-            const timestamp = Date.now();
+
             stateCopy.uploadFilesObj[fileObjKey].progressPercent = 100;
             this.setState(stateCopy);
             // console.log(new Intl.DateTimeFormat('en-US', {year: 'numeric', month: '2-digit',day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit'}).format(timestamp));
-            var originalName = file.name // 01.jpg
-            var resized64 = "resized-" + originalName; // resized512_01.jpg
-            var resized64Path = "64/" + resized64; // resized/....^
-            var resized512 = "resized-" + originalName; // resized512_01.jpg
-            var resized512Path = "512/" + resized512; // resized/....^
-            setTimeout(function () {
-                thisSpecialStrref.strRef.child(resized512Path).getDownloadURL().then(function (downloadURL3) {
-                thisSpecialStrref.strRef.child(resized512Path).getDownloadURL().then(function (downloadURL2) {
-                    thisSpecialStrref.strRef.child(resized64Path).getDownloadURL().then(function (downloadURL) {
-                        //Get metadata
-                        thisSpecialStrref.strRef.child(`images/${file.name}`).getMetadata().then((metadata) => {
 
+            this.testgetURL(file)
 
-                            let metadataFile = {
-                                name: metadata.name,
-                                size: metadata.size,
-                                contentType: metadata.contentType,
-                                user: thisSpecialStrref.state.user.email,
-                                pic64: downloadURL,
-                                pic512: downloadURL2,
-                                pic: downloadURL3,
-                                timestamp: new Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(timestamp)
-                                //  stateCopy: this.state.stateCopy
-                            }
-
-                            //Process save metadata
-                            const databaseRef = fire.database().ref('/image');
-                            databaseRef.push({ metadataFile });
-
-                            // Delay before delete file from state
-
-                        })
-                    })
-                })
-                })
-            }, 25000);
             // //Get metadata
             // uploadTask.snapshot.ref.getDownloadURL().then(function (downloadURL) {
             //     console.log('File available at', downloadURL);
@@ -193,14 +161,61 @@ class Home extends Component {
             //   }, 0.5);
 
         });
-        var uploadTaskS = Object.assign({}, this.state);
-        uploadTaskS.uploadFilesObj[fileObjKey].uploadTask = uploadTask;
-        this.setState(uploadTaskS);
-        console.log(uploadTaskS);
 
 
 
 
+
+    }
+    testgetURL(file) {
+        var originalName = file.name // 01.jpg
+        var resized64 = "resized-" + originalName; // resized512_01.jpg
+        var resized64Path = "64/" + resized64; // resized/....^
+        var resized512 = "resized-" + originalName; // resized512_01.jpg
+        var resized512Path = "512/" + resized512; // resized/....^
+        var originalPath = "images/" + originalName;
+        const timestamp = Date.now();
+        var _this = this
+        setTimeout(function () {
+            _this.strRef.child(originalPath).getDownloadURL().then(function (downloadURL3) {
+                _this.strRef.child(resized64Path).getDownloadURL().then(function (downloadURL) {
+                    _this.strRef.child(resized512Path).getDownloadURL().then(function (downloadURL2) {
+                        //Get metadata
+                        _this.strRef.child(`images/${file.name}`).getMetadata().then((metadata) => {
+
+
+                            let metadataFile = {
+                                name: metadata.name,
+                                size: metadata.size,
+                                contentType: metadata.contentType,
+                                user: _this.state.user.email,
+                                pic64: downloadURL,
+                                pic512: downloadURL2,
+                                pic: downloadURL3,
+                                timestamp: new Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(timestamp)
+                                //  stateCopy: this.state.stateCopy
+                            }
+
+                            //Process save metadata
+                            const databaseRef = fire.database().ref('/image');
+                            databaseRef.push({ metadataFile });
+
+                            // Delay before delete file from state
+
+                        }).catch(function (error) {
+                            alert("ตรงนี่เสีย" + file.name)
+                        })
+                    }).catch(function (error) {
+                        _this.testgetURL(file);
+                    })
+                }).catch(function (error) {
+                    _this.testgetURL(file);
+
+                })
+            }).catch(function (error) {
+                alert("ตรงนี่เสีย4" + originalPath)
+            })
+        }, 500);
     }
     btnCancel(fileId) {
         // console.log(fileId)
@@ -313,31 +328,29 @@ class Home extends Component {
     //ลบข้อมูล Metada จาก Firebase
     deleteMetaDataFromDatabase(rowData) {
 
-        const storageRef = fire.storage().ref(`images/${rowData.name}`);
+        const storageRef = fire.storage().ref(`images/${rowData.key}`);
 
         // Delete the file on storage
         storageRef.delete()
             .then(() => {
                 console.log("Delete file success");
 
-                let databaseRef = fire.database().ref('/image');
-
-                // Delete the file on realtime database
-                databaseRef.child(rowData.key).remove()
-                    .then(() => {
-                        console.log("Delete metada success");
-
-                    })
-                    .catch((error) => {
-                        console.log("Delete metada error : ", error.message);
-                    });
-
             })
 
             .catch((error) => {
                 console.log("Delete file error : ", error.message);
             });
+        let databaseRef = fire.database().ref('/image');
 
+        // Delete the file on realtime database
+        databaseRef.child(rowData.key).remove()
+            .then(() => {
+                console.log("Delete metada success");
+
+            })
+            .catch((error) => {
+                console.log("Delete metada error : ", error.message);
+            });
 
     }
 
@@ -372,7 +385,9 @@ class Home extends Component {
     //         //      console.log('Set Rows')
     //     })
     // }
-
+addbtn(){
+    <button>Tes22213131t</button>
+}
 
     renderUpload() {
         if (this.state.user) {
@@ -387,7 +402,7 @@ class Home extends Component {
                     </div>
                     <hr />
                     <nav class="App-nav">
-                        <section className="App-item">
+                        <section>
                             <form onSubmit={this.uploadSubmit}>
                                 <div class="inpc">
                                     <input
@@ -446,21 +461,42 @@ class Home extends Component {
                             </div>
                         </section>
                     </nav>
-                    <section className="display-item">
-                        <article className="App-article">
-                            <div class="showprogress">
+                    <section >
 
-                                <StorageDataTable
-                                    rows={rows}
-                                    filesMetadata={filesMetadata}
-                                    user={user}
-                                    deleteData={this.deleteMetaDataFromDatabase}
-                                    sortsize={this.sortsize}
-                                    sortname={this.sortname}
-                                /> </div>
-                        </article>
+                        <div class="showprogress">
+
+                            <StorageDataTable
+                                rows={rows}
+                                filesMetadata={filesMetadata}
+                                user={user}
+                                deleteData={this.deleteMetaDataFromDatabase}
+                                sortsize={this.sortsize}
+                                sortname={this.sortname}
+                            /> </div>
+
                     </section>
-
+                    <Popup trigger={<button className="button"> Delete </button>} modal>
+                        {close => (
+                            <div className="Dmodal">
+                                <div className="Dheader"> Do you want to Delete </div>
+                                <div className="Dactions">
+                                    <button className="button" onClick={() => {
+                                        this.addbtn()
+                                        close()
+                                        
+                                    }}>Yes</button>
+                                    <button
+                                        className="button"
+                                        onClick={() => {
+                                            console.log('modal closed')
+                                            close()
+                                        }}
+                                    >
+                                        No</button>
+                                </div>
+                            </div>
+                        )}</Popup>
+                        {this.addbtn()}
                 </div>
 
             );

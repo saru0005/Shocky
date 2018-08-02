@@ -35,7 +35,11 @@
   .tht{
     text-align: center;
     color: blue;
+    background: black
   }
   .mbt{
     text-align: right;
+  }
+  .th{
+    color:red
   }
