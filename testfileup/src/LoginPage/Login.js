@@ -78,8 +78,8 @@ renderLoginButon() {
         <br/><br/>
         <button type="submit" onClick={this.verifyEmail} class="loginBtn loginBtn--L">Re verifyEmail</button>
         <br/><br/><br/><br/><br/><br/>
-        <Link to="/Home" >Go to Upload</Link> 
-        
+        <Link to="/UploadFolders" >Go to Upload</Link> 
+      
 </div>
 <div class="form-group">
 </div><br/>
@@ -108,7 +108,8 @@ renderLoginButon() {
             <button className="loginBtn loginBtn--google" onClick={this.login2}>Log in with Google</button><br/><br/>
             <Link to="/Register" >สมัครสมาชิค</Link>
             &nbsp;&nbsp;&nbsp;&nbsp;
-            <Link to="/Reset" >ลืมรหัสผ่าน</Link> 
+            <Link to="/Reset" >ลืมรหัสผ่าน</Link>       &nbsp;&nbsp;&nbsp;&nbsp;
+          
             <br/><br/>
             </div>
                    

@@ -8,6 +8,8 @@ import Login from './LoginPage/Login'
 import Register from './RegisterTest/Register'
 import Reset from './RegisterTest/Reset'
 import UploadFolders from './Uploads/UploadFolders'
+import DocumentsFieldSet from './Uploads/DocumentsFieldSet'
+
 class App extends Component {
     constructor(props){
         super(props);
@@ -47,6 +49,7 @@ class App extends Component {
         <Route exact path="/Register" component={Register} />
         <Route exact path="/Reset" component={Reset} />
         <Route exact path="/UploadFolders" component={UploadFolders} />
+        <Route exact path="/DocumentsFieldSet" component={DocumentsFieldSet} />
             </Switch>
         
           </div> 

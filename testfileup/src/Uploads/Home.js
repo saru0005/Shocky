@@ -475,28 +475,7 @@ addbtn(){
                             /> </div>
 
                     </section>
-                    <Popup trigger={<button className="button"> Delete </button>} modal>
-                        {close => (
-                            <div className="Dmodal">
-                                <div className="Dheader"> Do you want to Delete </div>
-                                <div className="Dactions">
-                                    <button className="button" onClick={() => {
-                                        this.addbtn()
-                                        close()
-                                        
-                                    }}>Yes</button>
-                                    <button
-                                        className="button"
-                                        onClick={() => {
-                                            console.log('modal closed')
-                                            close()
-                                        }}
-                                    >
-                                        No</button>
-                                </div>
-                            </div>
-                        )}</Popup>
-                        {this.addbtn()}
+                    <Link to="/UploadFolders" >Go to Upload</Link> 
                 </div>
 
             );

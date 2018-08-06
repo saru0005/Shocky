@@ -7,7 +7,7 @@ const spawn = require('child-process-promise').spawn;
 // // Create and Deploy Your First Cloud Functions
 // // https://firebase.google.com/docs/functions/write-firebase-functions
 //
-exports.onFileChange512= functions.storage.object().onFinalize(event => {
+exports.onFileChange128= functions.storage.object().onFinalize(event => {
 
     const bucket = event.bucket;
     const contentType = event.contentType;

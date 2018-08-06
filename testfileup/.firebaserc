@@ -1,6 +1,7 @@
 {
   "projects": {
     "default": "filetestnew",
-    "shocky": "lingdrone-intern"
+    "shocky": "lingdrone-intern",
+    "Shocky": "filetestnew"
   }
 }
