@@ -36,6 +36,7 @@ class Home extends Component {
                 this.setState({ user });
             }
         });
+      
     }
 
 
@@ -175,6 +176,8 @@ class Home extends Component {
         var resized512Path = "512/" + resized512; // resized/....^
         var originalPath = "images/" + originalName;
         const timestamp = Date.now();
+        const keyData = this.props.keyDtb
+        console.log(keyData)
         var _this = this
         setTimeout(function () {
             _this.strRef.child(originalPath).getDownloadURL().then(function (downloadURL3) {
@@ -182,7 +185,7 @@ class Home extends Component {
                     _this.strRef.child(resized512Path).getDownloadURL().then(function (downloadURL2) {
                         //Get metadata
                         _this.strRef.child(`images/${file.name}`).getMetadata().then((metadata) => {
-
+                
 
                             let metadataFile = {
                                 name: metadata.name,
@@ -192,6 +195,7 @@ class Home extends Component {
                                 pic64: downloadURL,
                                 pic512: downloadURL2,
                                 pic: downloadURL3,
+                                FolderURL: keyData,
                                 timestamp: new Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(timestamp)
                                 //  stateCopy: this.state.stateCopy
                             }
@@ -393,6 +397,7 @@ addbtn(){
         if (this.state.user) {
             const { rows, filesMetadata, user, downloadURL } = this.state;
             const { uploadFilesObj } = this.state;
+            console.log(this.props.keyDtb)
             return (
                 <div class="App-div.container">
                     <img src={logo} className="App-logo" alt="logo" />
@@ -475,7 +480,8 @@ addbtn(){
                             /> </div>
 
                     </section>
-                    <Link to="/UploadFolders" >Go to Upload</Link> 
+                    
+                    
                 </div>
 
             );

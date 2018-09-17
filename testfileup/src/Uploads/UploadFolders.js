@@ -3,6 +3,7 @@ import firebase from '../config/Fire';
 import { Link } from 'react-router-dom'
 import logo from '../config/Ling logo.png';
 import DocumentInput from './DocumentInput';
+import Home from './Home';
 import fire from '../config/Fire';
 import { auth } from '../config/Fire';
 var shortid = require('shortid');
@@ -12,13 +13,16 @@ class UploadFolders extends Component {
         super(props);
         this.state = {
             value: '',
-            folderName: '',
+            keyDtb: '',
             documents: [],
             rows: [],
+            folderN: '',
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.sendDTB = this.sendDTB.bind(this);
+        this.fileUpload = this.fileUpload.bind(this);
+        this.renderFolder = this.renderFolder.bind(this);
     }
     componentWillMount() {
         this.getdataFromDatabase()
@@ -34,18 +38,22 @@ class UploadFolders extends Component {
 
         this.setState({ documents }, () => console.log(this.state.documents));
         this.sendDTB(folderName)
+        this.setState({ folderN : folderName})
+      
     }
     sendDTB(folderName) {
-        console.log("OMG This is a Name" + folderName)
+
         let sendName = {
             name: folderName,
             create: dateFormat(new Date(), "h:MM:ss TT"),
             UserId: this.state.user.email
         }
-        console.log("This is a papika" + sendName)
         // let usertt = this.props.index
         const databaseRef = fire.database().ref('/Folders');
-        databaseRef.push({ sendName });
+        const FolderDTB =  databaseRef.push({ sendName });
+        const keyDtb = FolderDTB.key
+        this.setState({keyDtb : keyDtb})
+        console.log(keyDtb)
     }
     componentDidMount() {
         auth.onAuthStateChanged((user) => {
@@ -79,41 +87,65 @@ class UploadFolders extends Component {
             console.log(rows)
         });
     }
+    fileUpload(){
+        
+    }
     renderFolder() {
+        var _this = this
         if (this.state.user) {
-            const { folderName, user, rows } = this.state;
-            console.log("testtttttttttt"+rows)
-            // const documents = this.state.documents.map((element, index) => {
-            //     return (
-            //         <DocumentInput
-            //             key={shortid.generate()}
-            //             index={element + index}
-            //         >
-            //         </DocumentInput>
-            //     )
-            // });
-
-            return (
+            if(_this.state.folderN){
+                const {keyDtb} = this.state
+                console.log(this.state.keyDtb);
+                return(
                 <div>
-                    <p>Hi ♥ {this.state.user.displayName || this.state.user.email}</p>
-                    <form onSubmit={this.handleSubmit}>
-                        Name:
-        <input type="text" value={this.state.value} name="name" onChange={this.handleChange} />
-                        <input type="submit" value="Submit" />
-                    </form>
-                    <button onClick={this.showDialog}>Show</button>
-                    <div>
-                        {/* <br /> <br /> <br /> <br /> <br />
-                    {folderName}
-                    <br />
-                    {documents} */}
-                        <DocumentInput
-                        rows={rows}
-                            user={user}
-                        />
-                    </div>
+              <Home 
+              keyDtb={keyDtb}
+              />
                 </div>
-            )
+                )
+            }
+            else{
+                const {  user, rows,keyDtb } = this.state;
+                
+                           
+                            // const documents = this.state.documents.map((element, index) => {
+                            //     return (
+                            //         <DocumentInput
+                            //             key={shortid.generate()}
+                            //             index={element + index}
+                            //         >
+                            //         </DocumentInput>
+                            //     )
+                            // });
+                
+                            return (
+                                <div>
+                                    <p>Hi ♥ {this.state.user.displayName || this.state.user.email}</p>
+                                    <form onSubmit={this.handleSubmit}>
+                                        Name:
+                        <input type="text" value={this.state.value} name="name" onChange={this.handleChange} />
+                                        <input type="submit" value="Submit" />
+                                    </form>
+                                    <button onClick={this.showDialog}>Show</button>
+                                    <div>
+                                        {/* <br /> <br /> <br /> <br /> <br />
+                                    {folderName}
+                                    <br />
+                                    {documents} */}
+                                        <DocumentInput
+                                        rows={rows}
+                                            user={user}
+                                            keyDtb={keyDtb}
+                                            fileUpload={this.fileUpload}
+                                        />
+                                    </div>
+                                    {/* <Home 
+                                    keyDtb={keyDtb} /> */}
+                                </div>
+                            )
+            }
+
+
         }
         else {
             return (
