@@ -176,8 +176,7 @@ class Home extends Component {
         var resized512Path = "512/" + resized512; // resized/....^
         var originalPath = "images/" + originalName;
         const timestamp = Date.now();
-        const keyData = this.props.keyDtb
-        console.log(keyData)
+        const keyUser = this.props.keyUser
         var _this = this
         setTimeout(function () {
             _this.strRef.child(originalPath).getDownloadURL().then(function (downloadURL3) {
@@ -195,7 +194,7 @@ class Home extends Component {
                                 pic64: downloadURL,
                                 pic512: downloadURL2,
                                 pic: downloadURL3,
-                                FolderURL: keyData,
+                                keyUser: _this.props.folderKey.key,
                                 timestamp: new Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(timestamp)
                                 //  stateCopy: this.state.stateCopy
                             }
@@ -217,7 +216,7 @@ class Home extends Component {
 
                 })
             }).catch(function (error) {
-                alert("ตรงนี่เสีย4" + originalPath)
+                _this.testgetURL(file);
             })
         }, 500);
     }
@@ -262,6 +261,7 @@ class Home extends Component {
                     pic512: childSnapshot.val().metadataFile.pic512,
                     contentType: childSnapshot.val().metadataFile.contentType,
                     size: childSnapshot.val().metadataFile.size,
+                    keyUser: childSnapshot.val().metadataFile.keyUser,
                     timestamp: childSnapshot.val().metadataFile.timestamp
                 });
             });
@@ -290,6 +290,7 @@ class Home extends Component {
                     pic512: childSnapshot.val().metadataFile.pic512,
                     contentType: childSnapshot.val().metadataFile.contentType,
                     size: childSnapshot.val().metadataFile.size,
+                    keyUser: childSnapshot.val().metadataFile.keyUser,
                     timestamp: childSnapshot.val().metadataFile.timestamp
                 });
             });
@@ -319,6 +320,7 @@ class Home extends Component {
                     pic512: childSnapshot.val().metadataFile.pic512,
                     contentType: childSnapshot.val().metadataFile.contentType,
                     size: childSnapshot.val().metadataFile.size,
+                    keyUser: childSnapshot.val().metadataFile.keyUser,
                     timestamp: childSnapshot.val().metadataFile.timestamp
                 });
             });
@@ -389,20 +391,19 @@ class Home extends Component {
     //         //      console.log('Set Rows')
     //     })
     // }
-addbtn(){
-    <button>Tes22213131t</button>
-}
 
     renderUpload() {
         if (this.state.user) {
             const { rows, filesMetadata, user, downloadURL } = this.state;
             const { uploadFilesObj } = this.state;
-            console.log(this.props.keyDtb)
+            console.log(this.props.folderKey)
+            const folderKey = this.props.folderKey
             return (
                 <div class="App-div.container">
                     <img src={logo} className="App-logo" alt="logo" />
                     <div class="p">
                         <p>Hi ♥ {this.state.user.displayName || this.state.user.email}</p>
+                        <p>You in folder: {folderKey.name}</p><Link to ="/"><button >Back</button></Link>
                         <Link to="/" ><button className="loginBtn--N" onClick={this.logout}>Logout</button></Link>
                     </div>
                     <hr />
@@ -477,6 +478,7 @@ addbtn(){
                                 deleteData={this.deleteMetaDataFromDatabase}
                                 sortsize={this.sortsize}
                                 sortname={this.sortname}
+                                folderKey={folderKey}
                             /> </div>
 
                     </section>

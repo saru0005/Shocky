@@ -12,8 +12,8 @@ class DocumentInput extends React.Component {
   render() {
     const user = this.props.user;
     //console.log(user.email)
-    const keyDtb = this.props.keyDtb
-    console.log(keyDtb)
+    // const keyDtb = this.props.keyDtb
+    // console.log(keyDtb)
     let messageNodes = this.props.rows.map((r) => {
         if(user.email === r.UserId){
         return (
@@ -23,7 +23,7 @@ class DocumentInput extends React.Component {
                 <th >{r.name}</th>
                 <th>{r.create}</th> 
                 <th>{r.UserId} </th>   
-                <th>    <button className="button" onClick= {this.props.fileUpload() }>Upload</button>  </th>   
+                <th>    <button className="button" onClick= {(e) => this.props.goUpload(e, r) }>Upload</button>  </th>   
                     
                                     
             </tr>

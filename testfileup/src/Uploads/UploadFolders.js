@@ -16,7 +16,7 @@ class UploadFolders extends Component {
             keyDtb: '',
             documents: [],
             rows: [],
-            folderN: '',
+            folderKey: '',
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -38,7 +38,7 @@ class UploadFolders extends Component {
 
         this.setState({ documents }, () => console.log(this.state.documents));
         this.sendDTB(folderName)
-        this.setState({ folderN : folderName})
+       
       
     }
     sendDTB(folderName) {
@@ -87,24 +87,26 @@ class UploadFolders extends Component {
             console.log(rows)
         });
     }
-    fileUpload(){
+        fileUpload(event ,folderKey){
+            event.preventDefault();
+            console.log("this is folder key :" + folderKey.key)
+            this.setState({folderKey : folderKey})
+        //    this.setState(folderKey)
         
     }
     renderFolder() {
         var _this = this
         if (this.state.user) {
-            if(_this.state.folderN){
-                const {keyDtb} = this.state
-                console.log(this.state.keyDtb);
+            if(this.state.folderKey){
+                const {folderKey} = this.state
                 return(
-                <div>
-              <Home 
-              keyDtb={keyDtb}
-              />
-                </div>
+                    <div>
+                    <Home
+                    folderKey={folderKey}
+                    />
+                    </div>
                 )
-            }
-            else{
+            }else{
                 const {  user, rows,keyDtb } = this.state;
                 
                            
@@ -126,7 +128,6 @@ class UploadFolders extends Component {
                         <input type="text" value={this.state.value} name="name" onChange={this.handleChange} />
                                         <input type="submit" value="Submit" />
                                     </form>
-                                    <button onClick={this.showDialog}>Show</button>
                                     <div>
                                         {/* <br /> <br /> <br /> <br /> <br />
                                     {folderName}
@@ -135,16 +136,15 @@ class UploadFolders extends Component {
                                         <DocumentInput
                                         rows={rows}
                                             user={user}
-                                            keyDtb={keyDtb}
-                                            fileUpload={this.fileUpload}
+                                            goUpload={this.fileUpload}
                                         />
                                     </div>
                                     {/* <Home 
                                     keyDtb={keyDtb} /> */}
                                 </div>
                             )
-            }
-
+            
+                        }
 
         }
         else {

@@ -10,46 +10,49 @@ class StorageDataTable extends Component{
 
     render() {
         const user = this.props.user;
-        
+        const folderKey = this.props.folderKey
         //console.log(user.email)
         let messageNodes = this.props.rows.map((r) => {
             var restname = 'resized-'+r.name;
             if(user.email === r.user){
-            return (
-                
-                <tr key={r.no + r.name}>
-                    <th >{r.name}</th>
-                    <th>{r.contentType}</th>
-                    <th className="mbt">{((r.size)/1000000).toFixed(3)}</th>       
-                    <th>{r.timestamp} </th>   
-                    <th className="tht"><Popup trigger={<div><img  src = {r.pic64} alt = "pic64*64" /></div>} modal>
-                                                    {close => (
-                                                        <div className="Dmodal">
-                                                        <img  src = {r.pic512}  alt = "pic64*64" />
-                                                        </div>
-                                                    )}</Popup></th>           
-                    <th className="tht"><Popup trigger={<button className="buttonDel"> Delete </button>} modal>
-                                                    {close => (
-                                                        <div className="Dmodal">
-                                                            <div className="Dheader"> Do you want to Delete </div>
-                                                            <div className="Dactions">
-                                                                <button className="button" onClick={() => {this.props.deleteData(r)
-                                                                 close()}}>Yes</button>
-                                                                <button
-                                                                    className="button"
-                                                                    onClick={() => {
-                                                                        console.log('modal closed')
-                                                                        close()
-                                                                    }}
-                                                                >
-                                                                    No</button>
-                                                            </div>
-                                                        </div>
-                                                    )}</Popup></th>
-                                                  
-                                        
-                </tr>
-            )}
+                if(r.keyUser === folderKey.key){
+                    return (
+                        
+                        <tr key={r.no + r.name}>
+                            <th >{r.name}</th>
+                            <th>{r.contentType}</th>
+                            <th className="mbt">{((r.size)/1000000).toFixed(3)}</th>       
+                            <th>{r.timestamp} </th>   
+                            <th className="tht"><Popup trigger={<div><img  src = {r.pic64} alt = "pic64*64" /></div>} modal>
+                                                            {close => (
+                                                                <div className="Dmodal">
+                                                                <img  src = {r.pic512}  alt = "pic64*64" />
+                                                                </div>
+                                                            )}</Popup></th>           
+                            <th className="tht"><Popup trigger={<button className="buttonDel"> Delete </button>} modal>
+                                                            {close => (
+                                                                <div className="Dmodal">
+                                                                    <div className="Dheader"> Do you want to Delete </div>
+                                                                    <div className="Dactions">
+                                                                        <button className="button" onClick={() => {this.props.deleteData(r)
+                                                                         close()}}>Yes</button>
+                                                                        <button
+                                                                            className="button"
+                                                                            onClick={() => {
+                                                                                console.log('modal closed')
+                                                                                close()
+                                                                            }}
+                                                                        >
+                                                                            No</button>
+                                                                    </div>
+                                                                </div>
+                                                            )}</Popup></th>
+                                                          
+                                                
+                        </tr>
+                    )
+                }
+          }
             else {
 
             }
