@@ -10,6 +10,8 @@ import IconPlay from '../IconPlay.png';
 //Import StorageDataTable
 import StorageDataTable from '../Components/StorageDataTable';
 import Popup from "reactjs-popup";
+import { Progress } from 'react-sweet-progress';
+import "react-sweet-progress/lib/style.css";
 
 class Home extends Component {
     constructor(props) {
@@ -36,7 +38,7 @@ class Home extends Component {
                 this.setState({ user });
             }
         });
-      
+
     }
 
 
@@ -120,7 +122,10 @@ class Home extends Component {
             var stateCopy = Object.assign({}, this.state);
 
             stateCopy.uploadFilesObj[fileObjKey].progressPercent = 100;
-            this.setState(stateCopy);
+            setTimeout(function () {
+                delete stateCopy.uploadFilesObj[fileObjKey];
+                thisSpecialStrref.setState(stateCopy);
+            }, 2000)
             // console.log(new Intl.DateTimeFormat('en-US', {year: 'numeric', month: '2-digit',day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit'}).format(timestamp));
 
             this.testgetURL(file)
@@ -184,7 +189,7 @@ class Home extends Component {
                     _this.strRef.child(resized512Path).getDownloadURL().then(function (downloadURL2) {
                         //Get metadata
                         _this.strRef.child(`images/${file.name}`).getMetadata().then((metadata) => {
-                
+
 
                             let metadataFile = {
                                 name: metadata.name,
@@ -333,11 +338,15 @@ class Home extends Component {
     }
     //ลบข้อมูล Metada จาก Firebase
     deleteMetaDataFromDatabase(rowData) {
-
-        const storageRef = fire.storage().ref(`images/${rowData.key}`);
+        console.log(rowData)
+        const storageRef = fire.storage().ref(`images/${rowData.name}`);
+        const storageRef64 = fire.storage().ref(`64/resized-${rowData.name}`);
+        const storageRef512 = fire.storage().ref(`512/resized-${rowData.name}`);
 
         // Delete the file on storage
         storageRef.delete()
+        storageRef64.delete()
+        storageRef512.delete()
             .then(() => {
                 console.log("Delete file success");
 
@@ -403,7 +412,7 @@ class Home extends Component {
                     <img src={logo} className="App-logo" alt="logo" />
                     <div class="p">
                         <p>Hi ♥ {this.state.user.displayName || this.state.user.email}</p>
-                        <p>You in folder: {folderKey.name}</p><Link to ="/"><button >Back</button></Link>
+                        <p>You in folder: {folderKey.name}</p><Link to="/"><button className="loginBtn--N" >Back</button></Link>
                         <Link to="/" ><button className="loginBtn--N" onClick={this.logout}>Logout</button></Link>
                     </div>
                     <hr />
@@ -431,7 +440,45 @@ class Home extends Component {
                                         const fileObj = uploadFilesObj[key];
                                         return (
                                             <div key={index}>
-                                                <progress value={fileObj.progressPercent} max="100"></progress>&nbsp; &nbsp;{fileObj.progressPercent}%
+                                                <Progress
+                                                    theme={{
+                                                        success: {
+                                                            symbol: '🏄‍',
+                                                            color: 'rgb(223, 105, 180)'
+                                                        }
+                                                    }}
+                                                    type="circle"
+                                                    strokeWidth={6}
+                                                    theme={
+                                                        {
+                                                            error: {
+                                                                symbol: fileObj.progressPercent + '%',
+                                                                trailColor: 'pink',
+                                                                color: 'red'
+                                                            },
+                                                            default: {
+                                                                symbol: fileObj.progressPercent + '%',
+                                                                trailColor: 'lightblue',
+                                                                color: 'blue'
+                                                            },
+                                                            active: {
+                                                                symbol: fileObj.progressPercent + '%',
+                                                                trailColor: 'yellow',
+                                                                color: 'orange'
+                                                            },
+                                                            success: {
+                                                                symbol: fileObj.progressPercent + '%',
+                                                                trailColor: 'lime',
+                                                                color: 'green'
+                                                            }
+                                                        }
+                                                    }
+
+                                                    percent={fileObj.progressPercent}
+                                                />
+                                                <br />
+                                                <br />
+                                                {/* <progress value={fileObj.progressPercent} max="100"></progress>&nbsp; &nbsp;{fileObj.progressPercent}% */}
 
 
                                                  <Popup trigger={<button className="button"> <img src={IconCancel} className="IconCancel" alt="Icon" /> </button>} modal>
@@ -482,8 +529,8 @@ class Home extends Component {
                             /> </div>
 
                     </section>
-                    
-                    
+
+
                 </div>
 
             );

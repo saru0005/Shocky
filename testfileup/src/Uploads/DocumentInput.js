@@ -19,10 +19,9 @@ class DocumentInput extends React.Component {
         return (
             
             <tr key={r.no + r.name}>
-                 <th >{r.key}</th>
+                 
                 <th >{r.name}</th>
-                <th>{r.create}</th> 
-                <th>{r.UserId} </th>   
+                <th>{r.create}</th>  
                 <th>    <button className="button" onClick= {(e) => this.props.goUpload(e, r) }>Upload</button>  </th>   
                     
                                     

@@ -20,6 +20,7 @@
     "react-popup": "^0.9.3",
     "react-router-dom": "^4.3.1",
     "react-scripts": "1.1.4",
+    "react-sweet-progress": "^1.1.2",
     "react-timestamp": "^4.4.0",
     "reactjs-popup": "^1.1.1",
     "short-id": "0.1.0-1",
