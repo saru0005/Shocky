@@ -11,7 +11,8 @@ class Login extends Component {
     this.state = {
       user: null,
       email: '',
-      password: ''
+      password: '',
+      admin: 'lingadmin@gmail.com'
     };
     this.login = this.login.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -71,7 +72,14 @@ componentDidMount() {
 }
 renderLoginButon() {
   if (this.state.user) {
-      return(
+    if(this.state.admin === this.state.user.email) {
+        return(
+            <div>
+             <Link to="/Admin" >Go to Admin</Link>     
+            </div>
+        )
+    }else{ 
+        return(
         <div className="loading container wrapper">
         <img src={logo} className="App-logo" alt="logo" />  
         <div class="form-group">
@@ -85,7 +93,8 @@ renderLoginButon() {
 </div><br/>
     </div>
     
-)
+)}
+     
   } else {
     return (
             <div className="loading container wrapper">

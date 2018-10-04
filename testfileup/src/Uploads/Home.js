@@ -405,7 +405,7 @@ class Home extends Component {
         if (this.state.user) {
             const { rows, filesMetadata, user, downloadURL } = this.state;
             const { uploadFilesObj } = this.state;
-            console.log(this.props.folderKey)
+            console.log(user)
             const folderKey = this.props.folderKey
             return (
                 <div class="App-div.container">

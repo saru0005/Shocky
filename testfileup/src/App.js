@@ -8,7 +8,7 @@ import Login from './LoginPage/Login'
 import Register from './RegisterTest/Register'
 import Reset from './RegisterTest/Reset'
 import UploadFolders from './Uploads/UploadFolders'
-
+import Admin from './Uploads/Admincontrol'
 class App extends Component {
     constructor(props){
         super(props);
@@ -47,6 +47,7 @@ class App extends Component {
           <Route exact path="/Home" component={Home} />
         <Route exact path="/Register" component={Register} />
         <Route exact path="/Reset" component={Reset} />
+        <Route exact path="/Admin" component={Admin} />
         <Route exact path="/UploadFolders" component={UploadFolders} />
             </Switch>
         
