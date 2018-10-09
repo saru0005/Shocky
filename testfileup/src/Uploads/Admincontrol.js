@@ -46,12 +46,28 @@ class Admincontrol extends Component {
                 });
             });
 
-            this.setState({
-                rows: rows
-            });
-            console.log(rows)
+            
+            this.removeDuplicates(rows,'UserId')
+            // console.log(rows)
         });
     }
+     removeDuplicates(originalArray, prop) {
+        var newArray = [];
+        var lookupObject  = {};
+   
+        for(var i in originalArray) {
+           lookupObject[originalArray[i][prop]] = originalArray[i];
+        }
+   
+        for(i in lookupObject) {
+            newArray.push(lookupObject[i]);
+        }
+        this.setState({
+            rows: newArray
+        });
+    }
+   
+   
     viewUpload(event ,folderKey){
         event.preventDefault();
         console.log("this is folder key :" + folderKey.key)
