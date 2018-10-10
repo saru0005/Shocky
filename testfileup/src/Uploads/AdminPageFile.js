@@ -21,12 +21,14 @@ class StorageDataTable extends Component{
                             <th>{r.contentType}</th>
                             <th className="mbt">{((r.size)/1000000).toFixed(3)}</th>       
                             <th>{r.timestamp} </th>   
-                            <th className="tht"><Popup trigger={<div><img  src = {r.pic64} alt = "pic64*64" /></div>} modal>
+                            {/* <th className="tht"><Popup trigger={<div><img  src = {r.pic64} alt = "pic64*64" /></div>} modal>
                                                             {close => (
                                                                 <div className="Dmodal">
-                                                                <img  src = {r.pic512}  alt = "pic64*64" />
+                                                                <img  src = {r.pic}  alt = "pic64*64" />
                                                                 </div>
-                                                            )}</Popup></th>           
+                                                            )}</Popup></th>            */}
+                            <th><button className="button" onClick= {(e) => this.props.goto(e, r) }>view Folder</button>  </th>  
+                            <th className="tht"><a class="button"  download="http://en.es-static.us/upl/2017/02/sirius-2-19-2018-Jim-Livingston-Custer-SD-lg-e1519156718851.jpg">Download image</a></th>           
                             <th className="tht"><Popup trigger={<button className="buttonDel"> Delete </button>} modal>
                                                             {close => (
                                                                 <div className="Dmodal">

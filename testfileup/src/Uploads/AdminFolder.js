@@ -1,17 +1,13 @@
 import React, { Component } from 'react';
 import fire from '../config/Fire';
 import { auth } from '../config/Fire';
-import AdminTable from './AdminTable';
-import AdminFolder from './AdminFolder';
-class Admincontrol extends Component {
+import AdminFolderTable from './AdminFolderTable';
+import AdminPage from './AdminPage';
+class AdminFolder extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            value: '',
-            keyDtb: '',
-            documents: [],
-            rows: [],
-            folderKey: '',
+            rows: []
         }
         this.renderFolder = this.renderFolder.bind(this);
         this.viewUpload = this.viewUpload.bind(this);
@@ -44,53 +40,42 @@ class Admincontrol extends Component {
             });
 
             
-            this.removeDuplicates(rows,'UserId')
-            // console.log(rows)
+            this.setState({
+                rows: rows
+            });
         });
     }
-     removeDuplicates(originalArray, prop) {
-        var newArray = [];
-        var lookupObject  = {};
-   
-        for(var i in originalArray) {
-           lookupObject[originalArray[i][prop]] = originalArray[i];
-        }
-   
-        for(i in lookupObject) {
-            newArray.push(lookupObject[i]);
-        }
-        this.setState({
-            rows: newArray
-        });
-    }
+
    
    
-    viewUpload(event ,UserNameID){
+    viewUpload(event ,folderKey){
         event.preventDefault();
-        console.log("this is folder key :" + UserNameID.UserId)
-        this.setState({UserNameID : UserNameID})
+        console.log("this is folder key :" + folderKey.key)
+        this.setState({folderKey : folderKey})
     //    this.setState(folderKey)
     
 }
     renderFolder() {
+        var _this = this
         if (this.state.user) {
-            if (this.state.UserNameID) {
-                const { UserNameID } = this.state
+            if (this.state.folderKey) {
+                const { folderKey } = this.state
                 return (
                     <div>
-                        <AdminFolder
-                    UserNameID={UserNameID}
+                        <AdminPage
+                    folderKey={folderKey}
                     />
                     </div>
                 )
             } else {
-                const { rows } = this.state;
-
+                const { user, rows } = this.state;
+                const UserNameID = this.props.UserNameID
                 return (
                     <div>
-                        <p>Hi ♥ {this.state.user.displayName || this.state.user.email}</p>
+                        <p>You are in user :{UserNameID.UserId}</p>
                         <div>
-                            <AdminTable
+                            <AdminFolderTable
+                                UserNameID={UserNameID}
                                 rows={rows}
                                 goUpload={this.viewUpload}
                             />
@@ -118,4 +103,4 @@ class Admincontrol extends Component {
 
     }
 }
-export default Admincontrol;
+export default AdminFolder;

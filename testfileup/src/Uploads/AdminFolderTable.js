@@ -1,28 +1,22 @@
 import React, { Component } from 'react';
-import axios from 'axios';
-import { Link } from 'react-router-dom'
-import fire from '../config/Fire';
-import { auth } from '../config/Fire';
 
-class DocumentInput extends React.Component {
+
+class AdminFolderTable extends React.Component {
   constructor(props) {
     super(props);
   }
 
   render() {
-    const user = this.props.user;
-    //console.log(user.email)
-    // const keyDtb = this.props.keyDtb
-    // console.log(keyDtb)
+    const UserNameID = this.props.UserNameID;
     let messageNodes = this.props.rows.map((r) => {
-      
+      if(r.UserId === UserNameID.UserId)
         return (
             
             <tr key={r.no + r.name}>
                  
                 <th >{r.UserId}</th>
-                {/* <th>{r.name}</th>  
-                <th>{r.create}</th>   */}
+                <th>{r.name}</th>  
+                <th>{r.create}</th>  
                 <th><button className="button" onClick= {(e) => this.props.goUpload(e, r) }>view Folder</button>  </th>   
                     
                                     
@@ -39,4 +33,4 @@ class DocumentInput extends React.Component {
       );
 }
 }
-export default DocumentInput;
+export default AdminFolderTable;
