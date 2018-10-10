@@ -27,8 +27,8 @@ class StorageDataTable extends Component{
                                                                 <img  src = {r.pic}  alt = "pic64*64" />
                                                                 </div>
                                                             )}</Popup></th>            */}
-                            <th><button className="button" onClick= {(e) => this.props.goto(e, r) }>view Folder</button>  </th>  
-                            <th className="tht"><a class="button"  download="http://en.es-static.us/upl/2017/02/sirius-2-19-2018-Jim-Livingston-Custer-SD-lg-e1519156718851.jpg">Download image</a></th>           
+                            <th><button className="buttonDel" onClick= {(e) => this.props.goto(e, r) }>FUCK OFF</button>  </th>  
+                            {/* <th className="tht"><a class="button"  download="http://en.es-static.us/upl/2017/02/sirius-2-19-2018-Jim-Livingston-Custer-SD-lg-e1519156718851.jpg">Download image</a></th>            */}
                             <th className="tht"><Popup trigger={<button className="buttonDel"> Delete </button>} modal>
                                                             {close => (
                                                                 <div className="Dmodal">

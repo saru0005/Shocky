@@ -15,4 +15,4 @@ import firebase from 'firebase';
   export const provider2 = new firebase.auth.GoogleAuthProvider();
   export default firebase;
   // // gsutil cors set cors.json gs:"filetestnew.appspot.com"
-  // Run gsutil cors set cors.json gs://"filetestnew.appspot.com"
+  // Run gsutil cors set cors.json gs://filetestnew.appspot.com
