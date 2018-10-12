@@ -15,6 +15,7 @@ class Admincontrol extends Component {
         }
         this.renderFolder = this.renderFolder.bind(this);
         this.viewUpload = this.viewUpload.bind(this);
+        this.ClearUser = this.ClearUser.bind(this);
     }
     componentWillMount() {
         this.getdataFromDatabase()
@@ -72,6 +73,13 @@ class Admincontrol extends Component {
     //    this.setState(folderKey)
     
 }
+ClearUser(event ,UserNameID){
+    event.preventDefault();
+    // console.log("this is folder key :" + UserNameID.UserId)
+    this.setState({UserNameID : ""})
+//    this.setState(folderKey)
+
+}
     renderFolder() {
         if (this.state.user) {
             if (this.state.UserNameID) {
@@ -80,6 +88,7 @@ class Admincontrol extends Component {
                     <div>
                         <AdminFolder
                     UserNameID={UserNameID}
+                    ClearUser={this.ClearUser}
                     />
                     </div>
                 )

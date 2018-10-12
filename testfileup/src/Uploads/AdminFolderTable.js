@@ -18,7 +18,7 @@ class AdminFolderTable extends React.Component {
                 <th>{r.name}</th>  
                 <th>{r.create}</th>  
                 <th><button className="button" onClick= {(e) => this.props.goUpload(e, r) }>view Folder</button>  </th>   
-                    
+                <th><button className="button" onClick= {(e) => this.props.DelFolder(e,r) }>Delete Folder</button></th>    
                                     
             </tr>
         )

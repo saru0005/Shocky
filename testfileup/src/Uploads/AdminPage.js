@@ -21,7 +21,7 @@ class AdminPage extends Component {
         this.deleteMetaDataFromDatabase = this.deleteMetaDataFromDatabase.bind(this);
         this.getfileurl = this.getfileurl.bind(this);
         this.strRef = fire.storage().ref();
-    }
+    } 
     componentDidMount() {
         auth.onAuthStateChanged((user) => {
             if (user) {
@@ -229,7 +229,8 @@ class AdminPage extends Component {
                     <img src={logo} className="App-logo" alt="logo" />
                     <div class="p">
                         <p>Hi ♥ {this.state.user.displayName || this.state.user.email}</p>
-                        <p>You in folder: {folderKey.name} User: {folderKey.UserId}</p><Link to="/"><button className="loginBtn--N" >Back</button></Link>
+                        <p>You in folder: {folderKey.name} User: {folderKey.UserId}</p>
+                        <button className="loginBtn--N" onClick={(e) => this.props.ClearUser(e, folderKey)} >Back</button>
                         <Link to="/" ><button className="loginBtn--N" onClick={this.logout}>Logout</button></Link>
                     </div>
                     <hr />
