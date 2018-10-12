@@ -412,7 +412,7 @@ class Home extends Component {
                     <img src={logo} className="App-logo" alt="logo" />
                     <div class="p">
                         <p>Hi ♥ {this.state.user.displayName || this.state.user.email}</p>
-                        <p>You in folder: {folderKey.name}</p><Link to="/"><button className="loginBtn--N" >Back</button></Link>
+                        <p>You in folder: {folderKey.name}</p><button className="loginBtn--N" onClick={this.props.ClearUser} >Back</button>
                         <Link to="/" ><button className="loginBtn--N" onClick={this.logout}>Logout</button></Link>
                     </div>
                     <hr />

@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
-import firebase from '../config/Fire';
-import { Link } from 'react-router-dom'
-import logo from '../config/Ling logo.png';
 import DocumentInput from './DocumentInput';
 import Home from './Home';
 import fire from '../config/Fire';
 import { auth } from '../config/Fire';
-var shortid = require('shortid');
+import Popup from "reactjs-popup";
 var dateFormat = require('dateformat');
 class UploadFolders extends Component {
     constructor(props) {
@@ -26,11 +23,14 @@ class UploadFolders extends Component {
     }
     componentWillMount() {
         this.getdataFromDatabase()
+        this.getImageFromDatabase()
     }
     handleChange(event) {
         this.setState({ value: event.target.value })
+        // console.log(this.state.value)
     }
     handleSubmit(event) {
+        // console.log(this.state.value)
         const folderName = this.state.value
         event.preventDefault();
         this.setState({ folderName: folderName })
@@ -38,8 +38,8 @@ class UploadFolders extends Component {
 
         this.setState({ documents }, () => console.log(this.state.documents));
         this.sendDTB(folderName)
-       
-      
+
+
     }
     sendDTB(folderName) {
 
@@ -50,9 +50,9 @@ class UploadFolders extends Component {
         }
         // let usertt = this.props.index
         const databaseRef = fire.database().ref('/Folders');
-        const FolderDTB =  databaseRef.push({ sendName });
+        const FolderDTB = databaseRef.push({ sendName });
         const keyDtb = FolderDTB.key
-        this.setState({keyDtb : keyDtb})
+        this.setState({ keyDtb: keyDtb })
         console.log(keyDtb)
     }
     componentDidMount() {
@@ -87,64 +87,170 @@ class UploadFolders extends Component {
             console.log(rows)
         });
     }
-        fileUpload(event ,folderKey){
-            event.preventDefault();
-            console.log("this is folder key :" + folderKey.key)
-            this.setState({folderKey : folderKey})
+    getImageFromDatabase() {
+        //    console.log("getMetaDataFromDatabase");
+        const dataRef = fire.database().ref('image');
+
+        dataRef.on('value', (snapshot) => {
+            let imageRows = [];
+
+            snapshot.forEach(function (childSnapshot) {
+                imageRows.push({
+
+                    key: childSnapshot.key,
+                    name: childSnapshot.val().metadataFile.name,
+                    user: childSnapshot.val().metadataFile.user,
+                    pic64: childSnapshot.val().metadataFile.pic64,
+                    pic512: childSnapshot.val().metadataFile.pic512,
+                    pic: childSnapshot.val().metadataFile.pic,
+                    contentType: childSnapshot.val().metadataFile.contentType,
+                    size: childSnapshot.val().metadataFile.size,
+                    keyUser: childSnapshot.val().metadataFile.keyUser,
+                    timestamp: childSnapshot.val().metadataFile.timestamp
+                });
+            });
+
+
+            this.setState({
+                imageRows: imageRows
+            });
+        });
+    }
+    fileUpload(event, folderKey) {
+        event.preventDefault();
+        console.log("this is folder key :" + folderKey.key)
+        this.setState({ folderKey: folderKey })
         //    this.setState(folderKey)
-        
+
+    }
+    ClearUser = () => {
+        this.setState({ folderKey: "" })
+    }
+    DelFolder = (event, rowData) => {
+        event.preventDefault();
+        console.log(this.state.imageRows)
+        var arrays = []
+        this.state.imageRows.forEach((r) => {
+            if (r.keyUser === rowData.key) {
+                arrays.push(r)
+            }
+        });
+        arrays.forEach((rowData) => {
+            const storageRef = fire.storage().ref(`images/${rowData.name}`);
+            const storageRef64 = fire.storage().ref(`64/resized-${rowData.name}`);
+            const storageRef512 = fire.storage().ref(`512/resized-${rowData.name}`);
+
+            // Delete the file on storage
+            storageRef.delete()
+            storageRef64.delete()
+            storageRef512.delete()
+                .then(() => {
+                    console.log("Delete file success");
+
+                })
+
+                .catch((error) => {
+                    console.log("Delete file error : ", error.message);
+                });
+            let databaseRef = fire.database().ref('/image');
+
+            // Delete the file on realtime database
+            databaseRef.child(rowData.key).remove()
+                .then(() => {
+                    console.log("Delete metada success");
+
+                })
+                .catch((error) => {
+                    console.log("Delete metada error : ", error.message);
+                });
+        })
+        console.log(arrays)
+        let databaseRef = fire.database().ref('/Folders');
+
+        // Delete the file on realtime database
+        databaseRef.child(rowData.key).remove()
+            .then(() => {
+                console.log("Delete metada success");
+
+            })
+            .catch((error) => {
+                console.log("Delete metada error : ", error.message);
+            });
+
     }
     renderFolder() {
-        var _this = this
         if (this.state.user) {
-            if(this.state.folderKey){
-                const {folderKey} = this.state
-                return(
+            if (this.state.folderKey) {
+                const { folderKey } = this.state
+                return (
                     <div>
-                    <Home
-                    folderKey={folderKey}
-                    />
+                        <Home
+                            ClearUser={this.ClearUser}
+                            folderKey={folderKey}
+                        />
                     </div>
                 )
-            }else{
-                const {  user, rows,keyDtb } = this.state;
-                
-                           
-                            // const documents = this.state.documents.map((element, index) => {
-                            //     return (
-                            //         <DocumentInput
-                            //             key={shortid.generate()}
-                            //             index={element + index}
-                            //         >
-                            //         </DocumentInput>
-                            //     )
-                            // });
-                
-                            return (
-                                <div>
-                                    <p>Hi ♥ {this.state.user.displayName || this.state.user.email}</p>
-                                    <form onSubmit={this.handleSubmit}>
+            } else {
+                const { user, rows } = this.state;
+
+
+                // const documents = this.state.documents.map((element, index) => {
+                //     return (
+                //         <DocumentInput
+                //             key={shortid.generate()}
+                //             index={element + index}
+                //         >
+                //         </DocumentInput>
+                //     )
+                // });
+
+                return (
+                    <div>
+                        <p>Hi ♥ {this.state.user.displayName || this.state.user.email}</p>
+                        <Popup trigger={<button className="buttonDel"> Create Folder </button>} modal>
+                            {close => (
+                                <div className="Dmodal">
+                                    <div className="Dheader">  Name:
+                        <input type="text" value={this.state.value} name="name" onChange={this.handleChange} /></div>
+                                    <div className="Dactions">
+                                        <button className="button" onClick={(e) => {
+                                            this.handleSubmit(e)
+                                            close()
+                                        }}>Yes</button>
+                                        <button
+                                            className="button"
+                                            onClick={() => {
+                                                console.log('modal closed')
+                                                close()
+                                            }}
+                                        >
+                                            No</button>
+                                    </div>
+                                </div>
+                            )}</Popup>
+                        {/* <form onSubmit={this.handleSubmit}>
                                         Name:
                         <input type="text" value={this.state.value} name="name" onChange={this.handleChange} />
                                         <input type="submit" value="Submit" />
-                                    </form>
-                                    <div>
-                                        {/* <br /> <br /> <br /> <br /> <br />
+                                    </form> */}
+                        <div>
+                            {/* <br /> <br /> <br /> <br /> <br />
                                     {folderName}
                                     <br />
                                     {documents} */}
-                                        <DocumentInput
-                                        rows={rows}
-                                            user={user}
-                                            goUpload={this.fileUpload}
-                                        />
-                                    </div>
-                                    {/* <Home 
+                            <DocumentInput
+                                rows={rows}
+                                user={user}
+                                goUpload={this.fileUpload}
+                                DelFolder={this.DelFolder}
+                            />
+                        </div>
+                        {/* <Home 
                                     keyDtb={keyDtb} /> */}
-                                </div>
-                            )
-            
-                        }
+                    </div>
+                )
+
+            }
 
         }
         else {

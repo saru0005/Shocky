@@ -3,6 +3,7 @@ import fire from '../config/Fire';
 import { auth } from '../config/Fire';
 import AdminTable from './AdminTable';
 import AdminFolder from './AdminFolder';
+import { Link } from 'react-router-dom'
 class Admincontrol extends Component {
     constructor(props) {
         super(props);
@@ -16,6 +17,11 @@ class Admincontrol extends Component {
         this.renderFolder = this.renderFolder.bind(this);
         this.viewUpload = this.viewUpload.bind(this);
         this.ClearUser = this.ClearUser.bind(this);
+        this.logout = this.logout.bind(this);
+    }
+    logout() {
+        fire.auth().signOut();
+        this.setState({ user: null });
     }
     componentWillMount() {
         this.getdataFromDatabase()
@@ -98,6 +104,7 @@ ClearUser(event ,UserNameID){
                 return (
                     <div>
                         <p>Hi ♥ {this.state.user.displayName || this.state.user.email}</p>
+                        <Link to="/" ><button className="loginBtn--N" onClick={this.logout}>Logout</button></Link>
                         <div>
                             <AdminTable
                                 rows={rows}
