@@ -12,7 +12,7 @@ class AdminPage extends Component {
         this.state = {
             value: '',
             keyDtb: '',
-            documents: [],
+            arrayName: [],
             rows: [],
             folderKey: '',
         }
@@ -36,17 +36,17 @@ class AdminPage extends Component {
         fire.auth().signOut();
         this.setState({ user: null });
     }
-    getfileurl(event,row){
+    getfileurl(event, row) {
         event.preventDefault();
-        var kurl = 'images/' + row.name; 
-        this.strRef.child(kurl).getDownloadURL().then(function(url) {
+        var kurl = 'images/' + row.name;
+        this.strRef.child(kurl).getDownloadURL().then(function (url) {
             // `url` is the download URL for 'images/stars.jpg'
-          
+
             // This can be downloaded directly:
             var xhr = new XMLHttpRequest();
-           
+
             xhr.responseType = 'blob';
-            xhr.onload = function(event) {
+            xhr.onload = function (event) {
                 var a = document.createElement('a');
                 a.href = window.URL.createObjectURL(xhr.response);
                 a.download = 'images/' + row.name; // Name the file anything you'd like.
@@ -56,29 +56,29 @@ class AdminPage extends Component {
             };
             xhr.open('GET', url);
             xhr.send();
-          
-          }).catch(function(error) {
+
+        }).catch(function (error) {
 
             // A full list of error codes is available at
             // https://firebase.google.com/docs/storage/web/handle-errors
             switch (error.code) {
-              case 'storage/object-not-found':
-                // File doesn't exist
-                break;
-          
-              case 'storage/unauthorized':
-                // User doesn't have permission to access the object
-                break;
-          
-              case 'storage/canceled':
-                // User canceled the upload
-                break;
-          
-              case 'storage/unknown':
-                // Unknown error occurred, inspect the server response
-                break;
+                case 'storage/object-not-found':
+                    // File doesn't exist
+                    break;
+
+                case 'storage/unauthorized':
+                    // User doesn't have permission to access the object
+                    break;
+
+                case 'storage/canceled':
+                    // User canceled the upload
+                    break;
+
+                case 'storage/unknown':
+                    // Unknown error occurred, inspect the server response
+                    break;
             }
-          });
+        });
     }
     //โหลดข้อมูล Metadata จาก Firebase
     getMetaDataFromDatabase() {
@@ -141,12 +141,90 @@ class AdminPage extends Component {
             });
 
     }
+    deleteAll = (arrayName) => {
+        console.log(arrayName)
+        arrayName.forEach((rowData) => {
+            const storageRef = fire.storage().ref(`images/${rowData.name}`);
+        const storageRef64 = fire.storage().ref(`64/resized-${rowData.name}`);
+        const storageRef512 = fire.storage().ref(`512/resized-${rowData.name}`);
+
+        // Delete the file on storage
+        storageRef.delete()
+        storageRef64.delete()
+        storageRef512.delete()
+            .then(() => {
+                console.log("Delete file success");
+
+            })
+
+            .catch((error) => {
+                console.log("Delete file error : ", error.message);
+            });
+        let databaseRef = fire.database().ref('/image');
+
+        // Delete the file on realtime database
+        databaseRef.child(rowData.key).remove()
+            .then(() => {
+                console.log("Delete metada success");
+
+            })
+            .catch((error) => {
+                console.log("Delete metada error : ", error.message);
+            });
+        })
+    }
+    downloadAll = (arrayName) => {
+        console.log(arrayName)
+        arrayName.forEach((row) => {
+            var kurl = 'images/' + row.name;
+            this.strRef.child(kurl).getDownloadURL().then(function (url) {
+                // `url` is the download URL for 'images/stars.jpg'
+    
+                // This can be downloaded directly:
+                var xhr = new XMLHttpRequest();
+    
+                xhr.responseType = 'blob';
+                xhr.onload = function (event) {
+                    var a = document.createElement('a');
+                    a.href = window.URL.createObjectURL(xhr.response);
+                    a.download = 'images/' + row.name; // Name the file anything you'd like.
+                    a.style.display = 'none';
+                    document.body.appendChild(a);
+                    a.click();
+                };
+                xhr.open('GET', url);
+                xhr.send();
+    
+            }).catch(function (error) {
+    
+                // A full list of error codes is available at
+                // https://firebase.google.com/docs/storage/web/handle-errors
+                switch (error.code) {
+                    case 'storage/object-not-found':
+                        // File doesn't exist
+                        break;
+    
+                    case 'storage/unauthorized':
+                        // User doesn't have permission to access the object
+                        break;
+    
+                    case 'storage/canceled':
+                        // User canceled the upload
+                        break;
+    
+                    case 'storage/unknown':
+                        // Unknown error occurred, inspect the server response
+                        break;
+                }
+            });
+        })
+    }
     renderUpload() {
         if (this.state.user) {
             const { rows } = this.state;
             console.log(this.props.folderKey)
             const folderKey = this.props.folderKey
-            return (    
+            return (
                 <div class="App-div.container">
                     <img src={logo} className="App-logo" alt="logo" />
                     <div class="p">
@@ -165,9 +243,11 @@ class AdminPage extends Component {
                                 user={folderKey.UserId}
                                 folderKey={folderKey}
                                 deleteData={this.deleteMetaDataFromDatabase}
-                                goto={this.getfileurl}    
+                                goto={this.getfileurl}
+                                deleteAll={this.deleteAll}
+                                downloadAll={this.downloadAll}
                             />
-                             </div>
+                        </div>
 
                     </section>
 

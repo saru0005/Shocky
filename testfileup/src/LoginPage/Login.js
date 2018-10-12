@@ -88,7 +88,6 @@ renderLoginButon() {
         <br/><br/><br/><br/><br/><br/>
         <Link to="/UploadFolders" >Go to Upload</Link>
         <br/><br/><br/><br/><br/><br/>
-        <Link to="/Admincontrol" >Go ADMIN</Link> 
       
 </div>
 <div class="form-group">
