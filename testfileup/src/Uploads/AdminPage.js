@@ -21,6 +21,8 @@ class AdminPage extends Component {
         this.deleteMetaDataFromDatabase = this.deleteMetaDataFromDatabase.bind(this);
         this.getfileurl = this.getfileurl.bind(this);
         this.strRef = fire.storage().ref();
+        this.sortsize = this.sortsize.bind(this);
+        this.sortname = this.sortname.bind(this);
     } 
     componentDidMount() {
         auth.onAuthStateChanged((user) => {
@@ -219,6 +221,64 @@ class AdminPage extends Component {
             });
         })
     }
+    sortsize() {
+        //    console.log("getMetaDataFromDatabase");
+        const nameref = fire.database().ref('image').orderByChild('metadataFile/size');
+
+        nameref.on('value', (snapshot) => {
+            let rows = [];
+
+            snapshot.forEach(function (childSnapshot) {
+                rows.push({
+
+                    key: childSnapshot.key,
+                    name: childSnapshot.val().metadataFile.name,
+                    user: childSnapshot.val().metadataFile.user,
+                    pic64: childSnapshot.val().metadataFile.pic64,
+                    pic512: childSnapshot.val().metadataFile.pic512,
+                    contentType: childSnapshot.val().metadataFile.contentType,
+                    size: childSnapshot.val().metadataFile.size,
+                    keyUser: childSnapshot.val().metadataFile.keyUser,
+                    timestamp: childSnapshot.val().metadataFile.timestamp
+                });
+            });
+
+            this.setState({
+                rows: rows
+            });
+            console.log(rows)
+        });
+    }
+
+    //sort name
+    sortname() {
+        //    console.log("getMetaDataFromDatabase");
+        const nameref = fire.database().ref('image').orderByChild('metadataFile/name');
+
+        nameref.on('value', (snapshot) => {
+            let rows = [];
+
+            snapshot.forEach(function (childSnapshot) {
+                rows.push({
+
+                    key: childSnapshot.key,
+                    name: childSnapshot.val().metadataFile.name,
+                    user: childSnapshot.val().metadataFile.user,
+                    pic64: childSnapshot.val().metadataFile.pic64,
+                    pic512: childSnapshot.val().metadataFile.pic512,
+                    contentType: childSnapshot.val().metadataFile.contentType,
+                    size: childSnapshot.val().metadataFile.size,
+                    keyUser: childSnapshot.val().metadataFile.keyUser,
+                    timestamp: childSnapshot.val().metadataFile.timestamp
+                });
+            });
+
+            this.setState({
+                rows: rows
+            });
+            console.log(rows)
+        });
+    }
     renderUpload() {
         if (this.state.user) {
             const { rows } = this.state;
@@ -247,6 +307,8 @@ class AdminPage extends Component {
                                 goto={this.getfileurl}
                                 deleteAll={this.deleteAll}
                                 downloadAll={this.downloadAll}
+                                sortsize={this.sortsize}
+                                sortname={this.sortname}
                             />
                         </div>
 
