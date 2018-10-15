@@ -84,7 +84,7 @@ class AdminFolder extends Component {
         this.setState({ folderKey: folderKey })
         //    this.setState(folderKey)
 
-    } 
+    }
     DelFolder = (event, rowData) => {
         event.preventDefault();
         console.log(this.state.imageRows)
@@ -156,7 +156,8 @@ class AdminFolder extends Component {
 
                 return (
                     <div>
-                        <p>You are in user :{UserNameID.UserId}</p>
+                        <div class="p">   <p>You are in user :{UserNameID.UserId}</p>
+                        </div>
                         <button className="loginBtn--N" onClick={(e) => this.props.ClearUser(e, UserNameID)} >Back</button>
                         <div>
                             <AdminFolderTable

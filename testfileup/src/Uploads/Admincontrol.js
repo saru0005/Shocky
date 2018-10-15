@@ -50,42 +50,42 @@ class Admincontrol extends Component {
                 });
             });
 
-            
-            this.removeDuplicates(rows,'UserId')
+
+            this.removeDuplicates(rows, 'UserId')
             // console.log(rows)
         });
     }
-     removeDuplicates(originalArray, prop) {
+    removeDuplicates(originalArray, prop) {
         var newArray = [];
-        var lookupObject  = {};
-   
-        for(var i in originalArray) {
-           lookupObject[originalArray[i][prop]] = originalArray[i];
+        var lookupObject = {};
+
+        for (var i in originalArray) {
+            lookupObject[originalArray[i][prop]] = originalArray[i];
         }
-   
-        for(i in lookupObject) {
+
+        for (i in lookupObject) {
             newArray.push(lookupObject[i]);
         }
         this.setState({
             rows: newArray
         });
     }
-   
-   
-    viewUpload(event ,UserNameID){
+
+
+    viewUpload(event, UserNameID) {
         event.preventDefault();
         console.log("this is folder key :" + UserNameID.UserId)
-        this.setState({UserNameID : UserNameID})
-    //    this.setState(folderKey)
-    
-}
-ClearUser(event ,UserNameID){
-    event.preventDefault();
-    // console.log("this is folder key :" + UserNameID.UserId)
-    this.setState({UserNameID : ""})
-//    this.setState(folderKey)
+        this.setState({ UserNameID: UserNameID })
+        //    this.setState(folderKey)
 
-}
+    }
+    ClearUser(event, UserNameID) {
+        event.preventDefault();
+        // console.log("this is folder key :" + UserNameID.UserId)
+        this.setState({ UserNameID: "" })
+        //    this.setState(folderKey)
+
+    }
     renderFolder() {
         if (this.state.user) {
             if (this.state.UserNameID) {
@@ -93,18 +93,20 @@ ClearUser(event ,UserNameID){
                 return (
                     <div>
                         <AdminFolder
-                    UserNameID={UserNameID}
-                    ClearUser={this.ClearUser}
-                    />
+                            UserNameID={UserNameID}
+                            ClearUser={this.ClearUser}
+                        />
                     </div>
                 )
             } else {
                 const { rows } = this.state;
 
                 return (
-                    <div>
-                        <p>Hi ♥ {this.state.user.displayName || this.state.user.email}</p>
-                        <Link to="/" ><button className="loginBtn--N" onClick={this.logout}>Logout</button></Link>
+                    <div >
+                        <div class="p">
+                            <p>Hi ♥ {this.state.user.displayName || this.state.user.email}</p>
+                            <Link to="/" ><button className="loginBtn--N" onClick={this.logout}>Logout</button></Link>
+                        </div>
                         <div>
                             <AdminTable
                                 rows={rows}
@@ -116,13 +118,6 @@ ClearUser(event ,UserNameID){
 
             }
 
-        }
-        else {
-            return (
-                <div>
-                    OMFG
-            </div>
-            )
         }
     }
     render() {

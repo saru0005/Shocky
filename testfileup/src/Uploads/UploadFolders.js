@@ -206,7 +206,7 @@ class UploadFolders extends Component {
 
                 return (
                     <div>
-                        <p>Hi ♥ {this.state.user.displayName || this.state.user.email}</p>
+                        <p class="p">Hi {this.state.user.displayName || this.state.user.email}</p>
                         <Popup trigger={<button className="buttonDel"> Create Folder </button>} modal>
                             {close => (
                                 <div className="Dmodal">
@@ -252,13 +252,6 @@ class UploadFolders extends Component {
 
             }
 
-        }
-        else {
-            return (
-                <div>
-                    OMFG
-            </div>
-            )
         }
     }
     render() {
