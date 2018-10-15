@@ -155,10 +155,11 @@ class AdminFolder extends Component {
                 const { user, rows } = this.state;
 
                 return (
-                    <div>
+                    <div >
                         <div class="p">   <p>You are in user :{UserNameID.UserId}</p>
                         </div>
                         <button className="loginBtn--N" onClick={(e) => this.props.ClearUser(e, UserNameID)} >Back</button>
+                        <br/><br/>
                         <div>
                             <AdminFolderTable
                                 UserNameID={UserNameID}

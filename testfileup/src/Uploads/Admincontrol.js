@@ -106,6 +106,7 @@ class Admincontrol extends Component {
                         <div class="p">
                             <p>Hi ♥ {this.state.user.displayName || this.state.user.email}</p>
                             <Link to="/" ><button className="loginBtn--N" onClick={this.logout}>Logout</button></Link>
+                            <br /><br />
                         </div>
                         <div>
                             <AdminTable

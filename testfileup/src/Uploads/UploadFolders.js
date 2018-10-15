@@ -229,12 +229,13 @@ class UploadFolders extends Component {
                                     </div>
                                 </div>
                             )}</Popup>
+                            <br /><br /><br />
                         {/* <form onSubmit={this.handleSubmit}>
                                         Name:
                         <input type="text" value={this.state.value} name="name" onChange={this.handleChange} />
                                         <input type="submit" value="Submit" />
                                     </form> */}
-                        <div align="center">
+                        <div class="foldersel" align="center">
                             {/* <br /> <br /> <br /> <br /> <br />
                                     {folderName}
                                     <br />

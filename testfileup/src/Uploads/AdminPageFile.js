@@ -37,12 +37,13 @@ class StorageDataTable extends Component {
                                     <div className="Dmodal">
                                         <div className="Dheader"> Do you want to Delete </div>
                                         <div className="Dactions">
-                                            <button className="button" onClick={() => {
+                                            <button className="buttonDel2" onClick={() => {
                                                 this.props.deleteData(r)
                                                 close()
                                             }}>Yes</button>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;
                                             <button
-                                                className="button"
+                                                className="buttonDel4"
                                                 onClick={() => {
                                                     console.log('modal closed')
                                                     close()
@@ -67,8 +68,9 @@ class StorageDataTable extends Component {
         return (
 
             <div className="thbor">
-                <button className="buttonDel" onClick={(e) => this.props.downloadAll(arrays)}>Download</button>
-                <button className="buttonDel" onClick={(e) => this.props.deleteAll(arrays)}>Delete</button>
+                <button className="buttonDel4" onClick={(e) => this.props.downloadAll(arrays)}>Download All</button>
+                &nbsp;&nbsp;&nbsp;
+                <button className="buttonDel2" onClick={(e) => this.props.deleteAll(arrays)}>Delete All</button>
                 <table>
                     <thead>
                         <tr >

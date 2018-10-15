@@ -229,7 +229,7 @@ class AdminPage extends Component {
                     <img src={logo} className="App-logo" alt="logo" />
                     <div class="p">
                         <p>Hi ♥ {this.state.user.displayName || this.state.user.email}</p>
-                        <p>You in folder: {folderKey.name} User: {folderKey.UserId}</p>
+                        <p>You in folder: {folderKey.name}  <br /> User: {folderKey.UserId}</p>
                         <button className="loginBtn--N" onClick={(e) => this.props.ClearUser(e, folderKey)} >Back</button>
                         <Link to="/" ><button className="loginBtn--N" onClick={this.logout}>Logout</button></Link>
                     </div>

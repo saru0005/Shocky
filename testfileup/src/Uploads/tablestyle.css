@@ -65,8 +65,14 @@
   border: 1px solid transparent; /* No more visible border */
   height: 30px; 
   transition: all 0.3s;  /* Simple transition for hover effect */
-  
+  text-align: center;
   }
+  td#t02, th#t02 {  
+    border: 1px solid transparent; /* No more visible border */
+    height: 30px; 
+    transition: all 0.3s;  /* Simple transition for hover effect */
+    
+    }
   tr#t02:nth-child(even) {
   background-color: rgb(255, 255, 255)
   }
@@ -101,9 +107,31 @@
     background-color: black;
     color: white;
     }
+    .buttonDel4{
+      background-color: #7bc272;
+      color: black;
+      font-size: 16px;
+      padding: 16px 30px;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+      text-align: center;
+      }
+      .buttonDel4:hover {
+      background-color: black;
+      color: white;
+      }
 
-    div #t02 {
+    div  #t02 {
         height: auto;
         width: auto;
         background-color: powderblue;
+    }
+
+    .foldersel{
+      width: auto;
+      height: auto;
+      overflow: auto;
+      border-radius: 30px;
+      text-align: center;
     }

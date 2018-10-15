@@ -23,7 +23,7 @@ class DocumentInput extends React.Component {
                 <th >{r.UserId}</th>
                 {/* <th>{r.name}</th>  
                 <th>{r.create}</th>   */}
-                <th><button className="button" onClick= {(e) => this.props.goUpload(e, r) }>view Folder</button>  </th>   
+                <th><button className="buttonDel3" onClick= {(e) => this.props.goUpload(e, r) }>View Folder</button>  </th>   
                     
                                     
             </tr>
@@ -31,7 +31,7 @@ class DocumentInput extends React.Component {
     });
     return (
         
-        <div className="thbor">
+        <div className="thbor" align="center">
        
                     {messageNodes}
 

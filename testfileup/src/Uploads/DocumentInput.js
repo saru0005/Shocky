@@ -25,7 +25,7 @@ class DocumentInput extends React.Component {
                         <th>{r.create}</th>
                         <th>
                         <button className="buttonDel3" onClick={(e) => this.props.goUpload(e, r)}>Upload</button>
-                        &nbsp;&nbsp;&nbsp; 
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
                         <button className="buttonDel2" onClick={(e) => this.props.DelFolder(e, r)}>Delete Folder</button></th>
 
                     </tr>
@@ -33,13 +33,13 @@ class DocumentInput extends React.Component {
             }
         });
         return (
-            <div className="thbor">
+            <div class="foldersel">
                 <table>
                     <thead>
                         <tr>
-                            <th className="tht2">Folder Name</th>
-                            <th className="tht2">Date</th>
-                            <th className="tht2"></th>
+                            <th class="tht2">Folder Name</th>
+                            <th class="tht2">Date</th>
+                            <th id="t02" class="tht2"></th>
                         </tr>
                     </thead>
                     <tbody>

@@ -2,6 +2,7 @@
   "projects": {
     "default": "filetestnew",
     "shocky": "lingdrone-intern",
-    "Shocky": "filetestnew"
+    "Shocky": "filetestnew",
+    "staging": "filetestnew"
   }
 }
