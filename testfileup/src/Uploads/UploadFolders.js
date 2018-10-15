@@ -4,6 +4,7 @@ import Home from './Home';
 import fire from '../config/Fire';
 import { auth } from '../config/Fire';
 import Popup from "reactjs-popup";
+import './tablestyle.css';
 var dateFormat = require('dateformat');
 class UploadFolders extends Component {
     constructor(props) {
@@ -213,18 +214,18 @@ class UploadFolders extends Component {
                                     <div className="Dheader">  Name:
                         <input type="text" value={this.state.value} name="name" onChange={this.handleChange} /></div>
                                     <div className="Dactions">
-                                        <button className="button" onClick={(e) => {
+                                        <button className="buttonDel2" onClick={(e) => {
                                             this.handleSubmit(e)
                                             close()
-                                        }}>Yes</button>
+                                        }}>Create</button>
                                         <button
-                                            className="button"
+                                            className="buttonDel3"
                                             onClick={() => {
                                                 console.log('modal closed')
                                                 close()
                                             }}
                                         >
-                                            No</button>
+                                            Cancel</button>
                                     </div>
                                 </div>
                             )}</Popup>
@@ -233,7 +234,7 @@ class UploadFolders extends Component {
                         <input type="text" value={this.state.value} name="name" onChange={this.handleChange} />
                                         <input type="submit" value="Submit" />
                                     </form> */}
-                        <div>
+                        <div align="center">
                             {/* <br /> <br /> <br /> <br /> <br />
                                     {folderName}
                                     <br />
@@ -256,7 +257,7 @@ class UploadFolders extends Component {
         else {
             return (
                 <div>
-                    OMFG
+                    LOADING
             </div>
             )
         }

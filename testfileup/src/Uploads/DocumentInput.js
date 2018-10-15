@@ -4,38 +4,51 @@ import { Link } from 'react-router-dom'
 import fire from '../config/Fire';
 import { auth } from '../config/Fire';
 import Home from '../Uploads/Home';
+import './tablestyle.css';
 class DocumentInput extends React.Component {
-  constructor(props) {
-    super(props);
-  }
+    constructor(props) {
+        super(props);
+    }
 
-  render() {
-    const user = this.props.user;
-    //console.log(user.email)
-    // const keyDtb = this.props.keyDtb
-    // console.log(keyDtb)
-    let messageNodes = this.props.rows.map((r) => {
-        if(user.email === r.UserId){
+    render() {
+        const user = this.props.user;
+        //console.log(user.email)
+        // const keyDtb = this.props.keyDtb
+        // console.log(keyDtb)
+        let messageNodes = this.props.rows.map((r) => {
+            if (user.email === r.UserId) {
+                return (
+
+                    <tr id="t02" key={r.no + r.name}>
+
+                        <th >{r.name}</th>
+                        <th>{r.create}</th>
+                        <th>
+                        <button className="buttonDel3" onClick={(e) => this.props.goUpload(e, r)}>Upload</button>
+                        &nbsp;&nbsp;&nbsp; 
+                        <button className="buttonDel2" onClick={(e) => this.props.DelFolder(e, r)}>Delete Folder</button></th>
+
+                    </tr>
+                )
+            }
+        });
         return (
-            
-            <tr key={r.no + r.name}>
-                 
-                <th >{r.name}</th>
-                <th>{r.create}</th>  
-                <th>    <button className="button" onClick= {(e) => this.props.goUpload(e, r) }>Upload</button>  </th>   
-                <th> <button className="button" onClick= {(e) => this.props.DelFolder(e, r) }>Delete Folder</button></th>  
-                                    
-            </tr>
-        )}
-    });
-    return (
-        
-        <div className="thbor">
-       
-                    {messageNodes}
-
-        </div>
-      );
-}
+            <div className="thbor">
+                <table>
+                    <thead>
+                        <tr>
+                            <th className="tht2">Folder Name</th>
+                            <th className="tht2">Date</th>
+                            <th className="tht2"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {messageNodes}
+                    </tbody>
+                </table>
+                {/* <button id="addBtn" onClick={this.onClick}>ADD</button> */}
+            </div>
+        );
+    }
 }
 export default DocumentInput;
