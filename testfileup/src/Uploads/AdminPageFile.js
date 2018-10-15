@@ -67,6 +67,8 @@ class StorageDataTable extends Component {
         return (
 
             <div className="thbor">
+                <button className="buttonDel" onClick={(e) => this.props.downloadAll(arrays)}>Download</button>
+                <button className="buttonDel" onClick={(e) => this.props.deleteAll(arrays)}>Delete</button>
                 <table>
                     <thead>
                         <tr >
@@ -83,10 +85,9 @@ class StorageDataTable extends Component {
                     <tbody>
                         {messageNodes}
                     </tbody>
-                    <button className="buttonDel" onClick={(e) => this.props.downloadAll(arrays)}>Download</button>
-                        <button className="buttonDel" onClick={(e) => this.props.deleteAll(arrays)}>Delete</button>
                 </table>
                 {/* <button id="addBtn" onClick={this.onClick}>ADD</button> */}
+
             </div>
         );
     }

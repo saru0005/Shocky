@@ -1,0 +1,109 @@
+.Dmodal {
+    font-size: 12px;
+  }
+  .Dmodal > .Dheader {
+    width: 99%;
+    border-bottom: 1px solid gray;
+    font-size: 18px;
+    text-align: center;
+    padding: 5px;
+  }
+  .Dmodal > .Dcontent {
+    width: 100%;
+    padding: 10px 5px;    
+  }
+  .Dmodal > .Dactions {
+    width: 100%;
+    padding: 10px 5px;
+    margin: auto;
+    text-align: center;
+    
+  }
+  .Dmodal > .Dclose {
+    cursor: pointer;
+    position: absolute;
+    display: block;
+    padding: 2px 5px;
+    line-height: 20px;
+    right: -10px;
+    top: -10px;
+    font-size: 24px;
+    background: #FFFFFF;
+    border-radius: 18px;
+    border: 2px solid #cfcece;
+  }
+  .tht#t02{
+    text-align: center;
+    color: blue;
+  }
+  .tht2#t02{
+   
+    text-align: center;
+    color: #ffffff;
+    background: black;
+    
+  }
+  .mb#t02{
+    text-align: center;
+  }
+  #t02 td, #t02 th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+  tr#t02:hover {background-color: rgba(161, 161, 161, 0.863);}
+  table#t02 {  
+  color: rgb(2, 26, 12);
+  font-family: Helvetica, Arial, sans-serif;
+  width: 100%; 
+  border-collapse: 
+  collapse; border-spacing: 5; 
+  
+  
+  
+  }
+  td, th {  
+  border: 1px solid transparent; /* No more visible border */
+  height: 30px; 
+  transition: all 0.3s;  /* Simple transition for hover effect */
+  
+  }
+  tr#t02:nth-child(even) {
+  background-color: rgb(255, 255, 255)
+  }
+  tr#t02:nth-child(odd) {
+  background-color: rgb(69, 172, 212)
+  }
+  .buttonDel2{
+  background-color: #ee2525;
+  color: black;
+  font-size: 16px;
+  padding: 16px 30px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  text-align: center;
+  }
+  .buttonDel2:hover {
+  background-color: black;
+  color: white;
+  }
+  .buttonDel3{
+    background-color: #1666fc;
+    color: black;
+    font-size: 16px;
+    padding: 16px 30px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    text-align: center;
+    }
+    .buttonDel3:hover {
+    background-color: black;
+    color: white;
+    }
+
+    div #t02 {
+        height: auto;
+        width: auto;
+        background-color: powderblue;
+    }
