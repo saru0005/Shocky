@@ -91,7 +91,7 @@ class Login extends Component {
                         <img src={logo} className="App-logo" alt="logo" />
                         <div class="form-group">
                             <br /><br />
-                            <button type="submit" onClick={this.verifyEmail} class="loginBtn loginBtn--L">Re verifyEmail</button>
+                            {/* <button type="submit" onClick={this.verifyEmail} class="loginBtn loginBtn--L">Re verifyEmail</button> */}
                             <br /><br /><br /><br /><br /><br />
                             <Link to="/UploadFolders" >Go to Upload</Link>
                             <br /><br /><br /><br /><br /><br />

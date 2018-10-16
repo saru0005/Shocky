@@ -34,10 +34,11 @@ class StorageDataTable extends Component{
                                                                 <div className="Dmodal">
                                                                     <div className="Dheader"> Do you want to Delete </div>
                                                                     <div className="Dactions">
-                                                                        <button className="button" onClick={() => {this.props.deleteData(r)
+                                                                        <button className="buttonDel2" onClick={() => {this.props.deleteData(r)
                                                                          close()}}>Yes</button>
+                                                                          &nbsp;&nbsp;&nbsp;&nbsp;
                                                                         <button
-                                                                            className="button"
+                                                                            className="buttonDel4"
                                                                             onClick={() => {
                                                                                 console.log('modal closed')
                                                                                 close()
